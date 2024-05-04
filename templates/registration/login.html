@@ -1,7 +1,19 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% load tailwind_filters %}
+{% load crispy_forms_tags %}
 
-<div class="text-slate-950">login</div>
+<div class="justify-self-center bg-slate-200">
+	<form class="w-96" method="POST">
+		{% csrf_token %}
+		{{ form|crispy }}
+
+		<p>Don't have an Account? <a href="/signup">here</a></p>
+
+		<p><a href="#">Forgot password?</a></p>
+		<button type="submit" class="">Login</button>
+	</form>
+</div>
 
 {% endblock %}

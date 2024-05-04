@@ -40,6 +40,9 @@ INSTALLED_APPS = [
 
     'core',
     'user',
+
+    'crispy_forms',
+    'crispy_tailwind',
 ]
 
 MIDDLEWARE = [
@@ -69,6 +72,11 @@ TEMPLATES = [
         },
     },
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+
+CRISPY_TEMPLATE_PACK = "tailwind"
+
 
 WSGI_APPLICATION = 'tribe.wsgi.application'
 
