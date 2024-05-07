@@ -13,7 +13,7 @@ class CustomUser(AbstractUser):
     groups = models.ManyToManyField(Group, verbose_name=('groups'), blank=True, related_name='customuser_set', related_query_name='user')
     user_permissions = models.ManyToManyField(Permission, verbose_name=('user permissions'), blank=True, related_name='customuser_set', related_query_name='user')
 
-    
+
 
 class Student(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True, related_name='student')
@@ -26,9 +26,6 @@ class Student(models.Model):
     def __str__(self):
         return f"{self.name} {self.surname} ({self.email})"
     
-
-
-
 
 
 
