@@ -2,13 +2,13 @@
 
 {% block content %}
 
-<div class="text-white p-4 bg-blue-950 mt-14 rounded-lg">
-    <h2 class="font-bold text-3xl m-12">User Registration</h2>
+<div class="text-black p-4 bg-blue-950 mt-14 rounded-lg">
+    <p class="font-bold text-3xl text-white mb-8">User Registration</p>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" name="student_signup">Sign Up as Student</button>
-        <button type="submit" name="teacher_signup">Sign Up as Teacher</button>
+        <button type="submit" name="student_signup" class="bg-gray-900 hover:bg-green-400 text-white font-bold py-2 px-4 rounded mx-4 mt-4">Sign Up as Student</button>
+        <button type="submit" name="teacher_signup" class="bg-gray-900 hover:bg-green-400 text-white font-bold py-2 px-4 rounded mx-4">Sign Up as Teacher</button>
     </form>
 </div>
 
