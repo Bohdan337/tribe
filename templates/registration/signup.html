@@ -2,8 +2,8 @@
 
 {% block content %}
 
-<div class="">
-    <h2>User Registration</h2>
+<div class="text-white p-4 bg-blue-950 mt-14 rounded-lg">
+    <h2 class="font-bold text-3xl m-12">User Registration</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
