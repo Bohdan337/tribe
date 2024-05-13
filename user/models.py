@@ -67,3 +67,19 @@ class Classes(models.Model):
     def __str__(self):
         return f"{self.tittle} {self.teacher} ({self.grade})"
     
+    
+class Schedule(models.Model):
+    day=models.TextField(max_length=300, blank=True, null=True)
+    lessons=models.ForeignKey(Classes, on_delete=models.CASCADE)
+    grade=models.CharField(max_length=200, null=True)
+    start_time=models.CharField(max_length=200, null=True)
+    end_time=models.CharField(max_length=200, null=True)
+    
+    def __str__(self):
+        return f"{self.day} {self.lessons} {self.start_time} {self.end_time}"
+    
+
+class Grade(models.Model):
+    grade_id=models.CharField(max_length=245, null=False, blank=False)
+    grade_tittle=models.CharField(max_length=245, null=False, blank=False)
+    grade_leader=models.ForeignKey(Teacher, on_delete=models.CASCADE)
