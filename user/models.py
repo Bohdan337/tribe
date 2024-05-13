@@ -60,7 +60,6 @@ class ChiefTeacher(models.Model):
 class Classes(models.Model):
     tittle = models.CharField(max_length=200, null=True)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    id = models.CharField(max_length=200, unique=True, null=True)
     summary = models.TextField(max_length=300, blank=True, null=True)
     grade = models.CharField(max_length=5, null=True)
     term = models.CharField(max_length=200, null=True)
