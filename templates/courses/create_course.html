@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<div class="" style="margin-top: 200px; background-color: rgb(122, 116, 33);">
+    <h1>Create Course</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create Course</button>
+    </form>
+</div>
+
+{% endblock %}
