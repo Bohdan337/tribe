@@ -8,17 +8,6 @@ from django.contrib.auth import authenticate, login
 
 
 
-def index(request):
-    return HttpResponse("Hello, world!")
-
-
-def login(request):
-    form = ''
-
-
-    return render(request, 'registration/login.html', {'form': form})
-
-
 def logout(request):
     from django.contrib.auth import logout
     logout(request)
@@ -27,8 +16,7 @@ def logout(request):
 
 
 
-
-def user_login(request):
+def login(request):
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
@@ -38,7 +26,8 @@ def user_login(request):
             return redirect('home')
         else:
             messages.error(request, 'Invalid email or password')
-    return render(request, 'users/login.html')
+    return render(request, 'registration/login.html')
+
 
 
 def signup(request):

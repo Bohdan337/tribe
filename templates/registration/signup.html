@@ -1,15 +1,40 @@
-{% extends 'base.html' %}
+{% load static %}
+{% load tailwind_filters %}
 
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="">
-    <h2>User Registration</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" name="student_signup">Sign Up as Student</button>
-        <button type="submit" name="teacher_signup">Sign Up as Teacher</button>
-    </form>
-</div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'src/styles.css' %}">
+    <title>Document</title>
+</head>
 
-{% endblock %}
+<body class="bg-gray-900 flex justify-center items-center h-screen">
+    <div class="text-white p-4 bg-blue-950 rounded-lg">
+        <p class="font-bold text-3xl mb-3 ml-3">Sign Up</p>
+        <form method="post" class="form flex flex-col">
+            {% csrf_token %}
+
+            <div class="flex flex-row">
+                {{ form.name }}
+                {{ form.surname }}
+                <!-- <input class="m-3 h-12 rounded-lg p-2 bg-gray-900 text-white" type="text" placeholder="Name" name="name">
+                <input class="m-3 h-12 rounded-lg p-2 bg-gray-900 text-white" type="text" placeholder="Surname" name="surname"> -->
+            </div>
+            {{ form.email }}
+            {{ form.password }}
+            {{ form.password2 }}
+            <!-- <input class="m-3 h-12 rounded-lg p-2 bg-gray-900 text-white" type="text" placeholder="Email" name="email">
+            <input class="m-3 h-12 rounded-lg p-2 bg-gray-900 text-white" type="text" placeholder="Password" name="password"> -->
+
+            <button type="submit" name="student_signup"
+                class="bg-gray-900 hover:bg-green-400 text-white font-bold py-2 px-4 rounded mx-4 mt-4">
+                Signup
+            </button>
+        </form>
+    </div>
+</body>
+
+</html>
