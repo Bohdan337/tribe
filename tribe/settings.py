@@ -40,6 +40,8 @@ INSTALLED_APPS = [
 
     'core',
     'user',
+    'subject',
+    'schedule',
 
     'crispy_forms',
     'crispy_tailwind',
