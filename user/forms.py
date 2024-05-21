@@ -1,7 +1,9 @@
 from django import forms
 from .models import CustomUser
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.forms.widgets import Input, PasswordInput
+from captcha.fields import CaptchaField
+
 
 
 
@@ -16,3 +18,9 @@ class CustomUserCreationForm(UserCreationForm, forms.Form):
         model = CustomUser
         fields = ('name', 'surname', 'email')
 
+
+
+class CustomLoginForm(AuthenticationForm):
+    username = forms.CharField(widget=Input(attrs={'class': 'm-3 h-12 rounded-lg p-2 bg-gray-900 text-white', 'placeholder': 'Username'}))
+    password = forms.CharField(widget=PasswordInput(attrs={'class': 'm-3 h-12 rounded-lg p-2 bg-gray-900 text-white', 'placeholder': 'Password'}))
+    captcha = CaptchaField()
