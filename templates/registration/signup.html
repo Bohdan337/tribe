@@ -14,7 +14,7 @@
 <body class="bg-gray-900 flex justify-center items-center h-screen">
     <div class="text-white p-4 bg-blue-950 rounded-lg">
         <p class="font-bold text-3xl mb-3 ml-3">Sign Up</p>
-        <form method="post" class="form flex flex-col">
+        <form method="post" class="form flex flex-col" action="{% url 'signup' %}">
             {% csrf_token %}
 
             <div class="flex flex-row">
@@ -23,7 +23,7 @@
             </div>
             <div class="flex flex-col">
             {{ form.email }}
-            {{ form.password }}
+            {{ form.password1 }}
             {{ form.password2 }}
             </div>
             
