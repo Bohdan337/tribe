@@ -12,5 +12,5 @@ class Subject(models.Model):
     # term = models.CharField(max_length=200, null=True)
     
     def __str__(self):
-        return f"{self.tittle} {self.teacher} ({self.grade})"
+        return f"{self.title} {self.teacher} ({self.grade})"
     

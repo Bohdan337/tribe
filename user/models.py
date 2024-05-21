@@ -17,6 +17,11 @@ class CustomUser(AbstractUser):
     surname=models.CharField(null=False, max_length=50)
     created_at=models.DateTimeField(auto_now_add=True)
 
+    def save(self, *args, **kwargs):
+        if not self.username:
+            self.username = f'{self.name} {self.surname}'
+        super().save(*args, **kwargs)
+
     
-    
+
 
