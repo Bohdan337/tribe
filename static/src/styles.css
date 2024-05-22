@@ -636,6 +636,10 @@ video {
   z-index: 50;
 }
 
+.row-end-1 {
+  grid-row-end: 1;
+}
+
 .m-2 {
   margin: 0.5rem;
 }
