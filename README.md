@@ -3,13 +3,13 @@
 > ### 1. Install [Python](https://www.python.org/downloads/)
 > ### 2. Install [git](https://git-scm.com/downloads)
 > ```
->sudo yum -y install git
->```
+> sudo yum -y install git
+> ```
 
 > ## Get template code
 > ```
->git clone _____________
->```
+> git clone _____________
+> ```
 
 > ## Initialize virtual environment
 > ```
@@ -20,5 +20,5 @@
 
 > ## Install requirements.txt
 > ```
-> pip install -r requirements.txt\
+> pip install -r requirements.txt
 > ```
