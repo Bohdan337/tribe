@@ -41,11 +41,13 @@ def login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 auth_login(request, user)
+                print(user, username, password)
                 return redirect('/')  
             else:
                 messages.error(request, 'Invalid email or password.')
         else:
-            messages.error(request, 'Invalid CAPTCHA.')
+            # messages.error(request, 'Invalid CAPTCHA.')
+            print('error')
     else:
         form = CustomLoginForm()
     return render(request, 'registration/login.html', {'form': form})
