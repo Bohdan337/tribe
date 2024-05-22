@@ -24,23 +24,24 @@
             <div class="flex flex-row content-stretch">
                 {{ form.non_field_errors }}
                 {{ form.name }}
-                <p class="text-red-600 text-sm">{{ form.name.errors|striptags }}</p>
+                <p class="text-red-600 text-sm ml-4 mt-2">{{ form.name.errors|striptags }}</p>
                 {{ form.surname }}
-                <p class="text-red-600 text-sm">{{ form.surname.errors|striptags }}</p>
+                <p class="text-red-600 text-sm ml-4 mt-2">{{ form.surname.errors|striptags }}</p>
             </div>
             <div class="flex flex-col">
                 {{ form.email }}
-                <p class="text-red-600 text-sm">{{ form.email.errors|striptags }}</p>
+                <p class="text-red-600 text-sm ml-4 mt-2">{{ form.email.errors|striptags }}</p>
                 {{ form.password1 }}
-                <p class="text-red-600 text-sm">{{ form.password1.errors|striptags }}</p>
+                <p class="text-red-600 text-sm ml-4 mt-2">{{ form.password1.errors|striptags }}</p>
                 {{ form.password2 }}
-                <p class="text-blue-950 text-sm">{{ form.password2.errors|striptags }}</p>
+                <p class="text-red-600 text-sm ml-4 mt-2">{{ form.password2.errors|striptags }}</p>
             </div>
             
             <button type="submit" name="student_signup"
                 class="bg-gray-900 hover:bg-green-400 text-white font-bold py-2 px-4 rounded mx-4 mt-4">
                 Signup
             </button>
+            <p class="ml-4 mt-2">Have an account? Click <a class="text-green-400 underline" href="{% url 'login' %}">here</a></p>
         </form>
     </div>
 </body>

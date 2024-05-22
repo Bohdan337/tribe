@@ -26,16 +26,18 @@
                 {{ form.username }}
                 {{ form.password }}
             </div>
-            <p class="text-red-600 text-sm">{{ form.username.errors|striptags }}</p>
-            <p class="text-red-600 text-sm">{{ form.password.errors|striptags }}</p>
-            <div class="text-black">{{ form.captcha }}</div>
-            <p class="text-red-600 text-sm">{{ form.captcha.errors|striptags }}</p>
+            <div class="ml-4 mt-2">
+                <p class="text-red-600 text-sm">{{ form.username.errors|striptags }}</p>
+                <p class="text-red-600 text-sm">{{ form.password.errors|striptags }}</p>
+                <div class="text-black">{{ form.captcha }}</div>
+                <p class="text-red-600 text-sm">{{ form.captcha.errors|striptags }}</p>
+            </div>
 
             <button type="submit"
                 class="bg-gray-900 hover:bg-green-400 text-white font-bold py-2 px-4 rounded mx-4 mt-4">
                 Login
             </button>
-            
+            <p class="ml-4 mt-2">Don't have an account? Click <a class="text-green-400 underline" href="{% url 'signup' %}">here</a></p>
         </form>
         <!-- {% if messages %}
         <ul class="messages">
