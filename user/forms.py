@@ -21,6 +21,6 @@ class CustomUserCreationForm(UserCreationForm, forms.Form):
 
 
 class CustomLoginForm(AuthenticationForm):
-    username = forms.CharField(widget=Input(attrs={'class': 'm-3 h-12 rounded-lg p-2 bg-gray-900 text-white', 'placeholder': 'Username'}))
-    password = forms.CharField(widget=PasswordInput(attrs={'class': 'm-3 h-12 rounded-lg p-2 bg-gray-900 text-white', 'placeholder': 'Password'}))
+    username = forms.CharField(widget=Input(attrs={'class': 'marg m-3 h-12 rounded-lg p-4 bg-gray-900 text-white', 'placeholder': 'Username'}))
+    password = forms.CharField(widget=PasswordInput(attrs={'class': 'marg m-3 h-12 rounded-lg p-4 bg-gray-900 text-white', 'placeholder': 'Password'}))
     captcha = CaptchaField()
