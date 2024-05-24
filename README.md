@@ -2,9 +2,6 @@
 > ## Requirements
 > ### 1. Install [Python](https://www.python.org/downloads/)
 > ### 2. Install [git](https://git-scm.com/downloads)
-> ```
-> sudo yum -y install git
-> ```
 
 > ## Get template code
 > ```
