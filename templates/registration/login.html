@@ -1,28 +1,50 @@
-{% extends 'base.html' %}
+{% load static %}
+{% load tailwind_filters %}
 
-{% block content %}
-<div class="container">
-    <h2>Login</h2>
-    <form method="post" class="form flex flex-col" style="margin-top: 40px;"  action="{% url 'login' %}">
-        {% csrf_token %}
-        <div class="flex flex-col" style="max-width: 250px; max-height: 500px; background-color: gray;">
-            {{ form.username }}
-            {{ form.password }}
-            {{ form.captcha }}
+<!DOCTYPE html>
+<html lang="en">
 
-            <button type="submit" class="bg-gray-900 hover:bg-green-400 text-white font-bold py-2 px-4 rounded mx-4 mt-4">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'src/styles.css' %}">
+    <title>Document</title>
+    <style>
+        .marg {
+            margin: 0.75rem;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 flex justify-center items-center h-screen">
+    <div class="text-white p-4 bg-blue-950 rounded-lg">
+        <p class="font-bold text-3xl mb-3 ml-3">Login</p>
+        <form method="post" class="form flex flex-col" action="{% url 'login' %}">
+            {% csrf_token %}
+            <p class="text-red-600 text-sm">{{ form.non_field_errors }}</p>
+            <div class="flex flex-row">
+                {{ form.username }}
+                {{ form.password }}
+            </div>
+            <div class="ml-4 mt-2">
+                <p class="text-red-600 text-sm">{{ form.username.errors|striptags }}</p>
+                <p class="text-red-600 text-sm">{{ form.password.errors|striptags }}</p>
+                <div class="text-black">{{ form.captcha }}</div>
+                <p class="text-red-600 text-sm">{{ form.captcha.errors|striptags }}</p>
+            </div>
+
+            <button type="submit"
+                class="bg-gray-900 hover:bg-green-400 text-white font-bold py-2 px-4 rounded mx-4 mt-4">
                 Login
             </button>
-        </div>
-        
-    </form>
-    {% if messages %}
+            <p class="ml-4 mt-2">Don't have an account? Click <a class="text-green-400 underline" href="{% url 'signup' %}">here</a></p>
+        </form>
+        <!-- {% if messages %}
         <ul class="messages">
             {% for message in messages %}
-                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
             {% endfor %}
         </ul>
-    {% endif %}
-</div>
-
-{% endblock %}
+        {% endif %} -->
+    </div>
+</body>
