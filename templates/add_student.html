@@ -1,0 +1,8 @@
+{% block content %}
+  <h2>Додати студента до курсу {{ subject.title }}</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Додати студента</button>
+  </form>
+{% endblock %}
