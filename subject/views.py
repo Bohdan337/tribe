@@ -18,7 +18,9 @@ def create_course(request):
         if form.is_valid():
             course = form.save(commit=False)
             course.teacher = request.user
+            
             course.save()
+            print(course)
             return redirect('/')
     else:
         form = CourseForm()

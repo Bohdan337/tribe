@@ -6,5 +6,7 @@ from subject.models import Subject
 def home(request):
     courses = Subject.objects.all()
     context = {'courses': courses}
+    print(courses)
 
     return render(request, 'index.html', context=context)
+

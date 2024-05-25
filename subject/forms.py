@@ -1,18 +1,23 @@
 from django import forms
 from .models import Subject
 from django.forms.widgets import Input
-
+from user.models import CustomUser
 
 class CourseForm(forms.ModelForm, forms.Form):
     title = forms.CharField(max_length=255, widget=Input(attrs={'class': 'm-3 h-12 rounded-lg p-2 bg-gray-900 text-white', 'placeholder': 'Title'}))
     summary = forms.CharField(max_length=1024, widget=Input(attrs={'class': 'm-3 h-12 rounded-lg p-2 bg-gray-900 text-white', 'placeholder': 'Description'}))
+    students = forms.ModelMultipleChoiceField(queryset=CustomUser.objects.filter(is_student=True, is_superuser=False), widget=forms.CheckboxSelectMultiple())
 
     class Meta:
         model = Subject
-        fields = ['title', 'summary']
+        fields = ['title', 'summary', 'students']
 
 
 
 class AddStudentForm(forms.Form):
-    email = forms.EmailField(label='Email студента', max_length=254)
+    students = forms.ModelMultipleChoiceField(queryset=CustomUser.objects.filter(is_student=True, is_superuser=False), widget=forms.CheckboxSelectMultiple())
+
+    class Meta:
+        model = Subject
+        fields = ['students']
 
