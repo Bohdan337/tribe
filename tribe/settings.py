@@ -45,7 +45,12 @@ INSTALLED_APPS = [
 
     'crispy_forms',
     'crispy_tailwind',
+    'captcha',
+    'django_recaptcha',
 ]
+
+RECAPTCHA_PUBLIC_KEY = '6LdLBGspAAAAAJDjh19p07Hu4pS1W_YQNEWLjTcC'
+RECAPTCHA_PRIVATE_KEY = '6LdLBGspAAAAAKon7wR_d1g3QdLw3IdjUNFw4SB5'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 
@@ -134,3 +139,5 @@ STATICFILES_DIRS = [BASE_DIR / "static/"]
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'user.CustomUser'

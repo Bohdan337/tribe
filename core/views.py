@@ -1,6 +1,10 @@
 from django.shortcuts import render, HttpResponse
+from subject.models import Subject
 
 # Create your views here.
 
 def home(request):
-    return render(request, 'index.html')
+    courses = Subject.objects.all()
+    context = {'courses': courses}
+
+    return render(request, 'index.html', context=context)

@@ -6,4 +6,5 @@ urlpatterns = [
     path('', include('core.urls')),
     path('', include('user.urls')),
     path('', include('subject.urls')),
+    path('captcha/', include('captcha.urls')),
 ]

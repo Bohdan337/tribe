@@ -1,12 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="p-4 bg-blue-950 mt-14 rounded-lg">
-  <h1 class="text-3xl text-white">Welcome To Our Website))</h1>
+<div class="p-3 bg-blue-950 mt-14 rounded-lg flex flex-row justify-between">
+  <h1 class="text-2xl text-white">Your Courses</h1>
+  <a class="inline-flex w-8 h-8 justify-center items-center bg-green-400 hover:bg-green-300 text-pink-50 hover:text-white rounded-full transition duration-150" href="{% url 'create_course' %}">+</a>
 </div>
 
 <div class="grid grid-cols-4 gap-4 mt-4">
-  <div class="max-w-xs my-2">
+  {% for course in courses %}
+  <div class="max-w-xs">
     <div class="relative bg-blue-950 shadow-lg rounded-lg p-5 overflow-hidden">
       <svg class="absolute top-0 right-0" width="158" height="119" aria-hidden="true">
         <defs>
@@ -107,9 +109,9 @@
         </g>
       </svg>
       <div class="relative pt-[6.25rem] pb-14">
-        <div class="text-xs font-bold uppercase text-green-400 tracking-widest mb-2">subject</div>
-        <h3 class="text-2xl font-extrabold text-indigo-50 leading-snug mb-2">Number 1</h3>
-        <p class="text-indigo-200">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+        <div class="text-xs font-bold uppercase text-green-400 tracking-widest mb-2">Course</div>
+        <h3 class="text-2xl font-extrabold text-indigo-50 leading-snug mb-2">{{ course.title }}</h3>
+        <p class="text-indigo-200">{{ course.summary }}</p>
       </div>
 
       <div class="relative text-right">
@@ -118,6 +120,8 @@
       </div>
     </div>
   </div>
+  {% endfor %}
+
 </div>
 
 {% endblock content %}
