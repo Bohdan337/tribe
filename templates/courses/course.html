@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="p-3 bg-blue-950 mt-14 rounded-lg flex flex-row justify-between">
+    <h1 class="text-2xl text-white">{{ subject.title }}</h1>
+</div>
+
+<div class="mt-4 p-3 bg-blue-950 rounded-lg flex text-white">
+    {{ subject.summary }}
+</div>
+
+{% endblock %}

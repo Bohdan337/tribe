@@ -3,6 +3,15 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from .forms import CourseForm
 from django.contrib import messages
+from django.shortcuts import get_object_or_404
+
+@login_required
+def course(request, id):
+    from .models import Subject
+    subject = get_object_or_404(Subject, pk=int(id))
+    context = {'subject': subject}
+
+    return render(request, 'courses/course.html', context=context)
 
 @login_required
 def create_course(request):
