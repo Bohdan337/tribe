@@ -35,6 +35,8 @@
                 <p class="text-red-600 text-sm ml-4 mt-2">{{ form.password1.errors|striptags }}</p>
                 {{ form.password2 }}
                 <p class="text-red-600 text-sm ml-4 mt-2">{{ form.password2.errors|striptags }}</p>
+
+                {{ form.captcha }}
             </div>
             
             <button type="submit" name="student_signup"

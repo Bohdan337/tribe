@@ -1,7 +1,7 @@
 from django import forms
 from .models import CustomUser
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.forms.widgets import Input, PasswordInput
+from django.forms.widgets import Input, PasswordInput, EmailInput
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV2Checkbox
 
@@ -18,11 +18,15 @@ class CustomUserCreationForm(UserCreationForm, forms.Form):
 
     class Meta:
         model = CustomUser
-        fields = ('name', 'surname', 'email')
+        fields = ('name', 'surname', 'email', 'captcha')
 
 
 
 class CustomLoginForm(AuthenticationForm):
-    username = forms.CharField(widget=Input(attrs={'class': 'm-3 h-12 rounded-lg p-2 bg-gray-900 text-white', 'placeholder': 'Name und surname'}))
-    password = forms.CharField(widget=PasswordInput(attrs={'class': 'm-3 h-12 rounded-lg p-2 bg-gray-900 text-white', 'placeholder': 'Password'}))
+    username = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'm-3 h-12 rounded-lg p-2 bg-gray-900 text-white', 'placeholder': 'Email'}), label='Email')    
+    password = forms.CharField(max_length=255, widget=PasswordInput(attrs={'class': 'm-3 h-12 rounded-lg p-2 bg-gray-900 text-white', 'placeholder': 'Password'}))
     captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
+
+
+
+

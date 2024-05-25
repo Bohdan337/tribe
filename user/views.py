@@ -23,7 +23,7 @@ def signup(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            form.save()
             messages.success(request, 'Account created successfully. You can now log in.')
             return redirect('login')
     else:
@@ -32,22 +32,22 @@ def signup(request):
 
 
 
-def login(request):
+def login_views(request):
     if request.method == 'POST':
         form = CustomLoginForm(request, data=request.POST)
         if form.is_valid():
-            username = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
-            user = authenticate(request, username=username, password=password)
+            user = authenticate(request, username=email, password=password) 
+            
+            print(user, password)
             if user is not None:
                 auth_login(request, user)
-                print(user, username, password)
-                return redirect('/')  
+                return redirect('/')
             else:
                 messages.error(request, 'Invalid email or password.')
         else:
-            # messages.error(request, 'Invalid CAPTCHA.')
-            print('error')
+            messages.error(request, 'Invalid CAPTCHA.')
     else:
         form = CustomLoginForm()
     return render(request, 'registration/login.html', {'form': form})
