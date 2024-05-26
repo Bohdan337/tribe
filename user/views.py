@@ -20,10 +20,18 @@ def logout(request):
 
 
 def signup(request):
+    from . models import Profile
+
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+
+            profile = Profile(user=user)
+            profile.save()
+
+            print(profile)
+
             messages.success(request, 'Account created successfully. You can now log in.')
             return redirect('login')
     else:
