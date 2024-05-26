@@ -6,6 +6,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
+from django.shortcuts import get_object_or_404
 
 
 
@@ -15,7 +16,6 @@ def logout(request):
     logout(request)
 
     return redirect('homepage')
-
 
 
 
@@ -59,3 +59,13 @@ def login_views(request):
     else:
         form = CustomLoginForm()
     return render(request, 'registration/login.html', {'form': form})
+
+
+
+def profile(request, slug):
+    from .models import Profile
+
+    profile = get_object_or_404(Profile, slug=slug)
+    context = {'profile': profile}
+
+    return render(request, 'profile.html', context=context)

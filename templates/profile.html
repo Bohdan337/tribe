@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="mt-14 w-full text-white flex flex-row">
+    <div class="w-96">
+        <div class="bg-blue-950 p-3 rounded-lg">
+            <img src="{{ profile.image.url }}" width="100" alt="avatar">
+            <p class="text-xl">{{ profile.user.name }} {{ profile.user.surname }}</p>
+            <div class="flex my-2">
+                <p class="text-sm">Email: {{ profile.user.email }}</p>
+            </div>
+        </div>
+        <div class="bg-blue-950 p-3 rounded-lg mt-4">
+            <p class="text-xl">Your courses</p>
+            <div class="my-2 grid grid-cols-4 gap-2">
+                <div class="text-sm bg-green-400 w-32 h-16 rounded-lg p-2">1</div>
+                <div class="text-sm bg-green-400 w-32 h-16 rounded-lg p-2">2</div>
+                <div class="text-sm bg-green-400 w-32 h-16 rounded-lg p-2">3</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full ml-4">
+        <div class="rounded-lg bg-blue-950 p-3">
+            About
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
