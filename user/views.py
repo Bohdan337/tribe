@@ -24,7 +24,9 @@ def signup(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Account created successfully. You can now log in.')
+            name = form.cleaned_data.get('name')
+            
+            messages.success(request, f'Account created successfully, {name}. You can now log in.')
             return redirect('login')
     else:
         form = CustomUserCreationForm()
@@ -43,11 +45,9 @@ def login_views(request):
             print(user, password)
             if user is not None:
                 auth_login(request, user)
+                messages.success(request, f'Logged in successfully, {user.name}.')
                 return redirect('/')
-            else:
-                messages.error(request, 'Invalid email or password.')
-        else:
-            messages.error(request, 'Invalid CAPTCHA.')
+
     else:
         form = CustomLoginForm()
     return render(request, 'registration/login.html', {'form': form})

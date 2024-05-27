@@ -21,6 +21,8 @@ def create_course(request):
             
             course.save()
             print(course)
+
+            messages.success(request, 'Course created successfully.')
             return redirect('/')
     else:
         form = CourseForm()
