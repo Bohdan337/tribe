@@ -20,6 +20,7 @@ def create_course(request):
             course.teacher = request.user
             
             course.save()
+            form.save_m2m()
             print(course)
 
             messages.success(request, 'Course created successfully.')
