@@ -5,8 +5,10 @@
 <div class="mt-14 w-full text-white flex flex-row">
     <div class="w-96">
         <div class="bg-blue-950 p-3 rounded-lg">
-            <!-- <img src="{{ profile.image.url }}" width="100" alt="avatar"> -->
-            <p class="text-xl">{{ profile.user.name }} {{ profile.user.surname }}</p>
+            <div class="flex flex-row content-center">
+                <img class="rounded-full" src="{{ profile.image.url }}" width="50" alt="avatar">
+                <p class="text-xl ml-2">{{ profile.user.name }} {{ profile.user.surname }}</p>
+            </div>
             <div class="mt-4">
                 <p class="text-sm mt-4">{{ profile.user.created_at }}</p>
             </div>
