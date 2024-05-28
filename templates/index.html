@@ -3,25 +3,35 @@
 {% block content %}
 <div class="p-3 bg-blue-950 mt-14 rounded-lg flex flex-row justify-between">
   <h1 class="text-2xl text-white">Your Courses</h1>
-  <a class="inline-flex w-8 h-8 justify-center items-center bg-green-400 hover:bg-green-300 text-pink-50 hover:text-white rounded-full transition duration-150" href="{% url 'create_course' %}">+</a>
+  <a class="inline-flex w-8 h-8 justify-center items-center bg-green-400 hover:bg-green-300 text-pink-50 hover:text-white rounded-full transition duration-150"
+    href="{% url 'create_course' %}">+</a>
 </div>
 
 {% if messages %}
 <div class="messages">
-    <ul class="messages">
-        {% for message in messages %}
-        <li class="bg-blue-950 text-white p-2 rounded my-2 {{ message.tags }}">
-            {{ message }}
-        </li>
-        {% endfor %}
-    </ul>
+  <ul class="messages">
+    {% for message in messages %}
+    <li class="bg-blue-950 text-white p-2 rounded my-2 {{ message.tags }}">
+      {{ message }}
+    </li>
+    {% endfor %}
+  </ul>
 </div>
 {% endif %}
 
 <div class="grid grid-cols-4 gap-4 mt-4">
   {% for subject in subject %}
-  <div class="max-w-xs" >
-    <div class="relative bg-blue-950 shadow-lg rounded-lg p-5 overflow-hidden" >
+  <div class="max-w-xs">
+    <div class="relative bg-blue-950 shadow-lg rounded-lg p-5 overflow-hidden">
+      <div class="text-white flex flex-row items-center">
+        <svg xmlns="http://www.w3.org/2000/svg"
+          class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white group w-8"
+          viewBox="0 0 448 512">
+          <path fill="#fff"
+            d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z" />
+        </svg>
+        {{ course.students.all|length }}
+      </div>
       <svg class="absolute top-0 right-0" width="158" height="119" aria-hidden="true">
         <defs>
           <linearGradient x1="50%" y1="0%" x2="50%" y2="96.22%" id="a">
@@ -128,10 +138,8 @@
 
       <div class="relative text-right">
         <a class="inline-flex w-11 h-11 justify-center items-center bg-green-400 hover:bg-green-300 text-pink-50 hover:text-white rounded-full transition duration-150"
-        href="{% url 'course' subject.id %}"><span class="sr-only">Study</span> <span class="font-bold -mt-px">-></span></a>
-      </div>
-      <div class="">
-        {{ course.students.all|length }}
+          href="{% url 'course' subject.id %}"><span class="sr-only">Study</span> <span
+            class="font-bold -mt-px">-></span></a>
       </div>
     </div>
   </div>

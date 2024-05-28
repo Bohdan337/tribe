@@ -736,6 +736,10 @@ video {
   height: 1rem;
 }
 
+.h-96 {
+  height: 24rem;
+}
+
 .w-11 {
   width: 2.75rem;
 }
@@ -783,6 +787,14 @@ video {
 
 .w-12 {
   width: 3rem;
+}
+
+.w-10 {
+  width: 2.5rem;
+}
+
+.w-1 {
+  width: 0.25rem;
 }
 
 .max-w-xs {
@@ -1046,6 +1058,10 @@ video {
 
 .text-right {
   text-align: right;
+}
+
+.align-middle {
+  vertical-align: middle;
 }
 
 .text-2xl {

@@ -13,8 +13,9 @@
         </div>
         <div class="bg-blue-950 p-3 rounded-lg mt-4">
             <p class="text-xl">Course link</p>
-            <button onclick="click()" class="flex flex-row rounded-lg p-3 bg-green-400 mt-4 justify-between hover:bg-green-300">
-                <p id="url">tribe/course/qwer</p>
+            <button onclick="click()"
+                class="w-full flex flex-row rounded-lg p-3 bg-green-400 mt-4 justify-between hover:bg-green-300">
+                <p id="url">/course/connect/{{ subject.id }}</p>
                 <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                     <path fill="#111827"
@@ -22,23 +23,29 @@
                 </svg>
             </button>
         </div>
+        <div class="bg-blue-950 p-3 rounded-lg mt-4 flex flex-row justify-between">
+            <p class="text-xl">Planned meetings</p>
+            <a class="inline-flex w-11 h-11 justify-center items-center bg-green-400 hover:bg-green-300 text-pink-50 hover:text-white rounded-full transition duration-150"
+                href="{% url 'course' subject.id %}"><span class="sr-only">Study</span> <span
+                    class="font-bold -mt-px">+</span></a>
+        </div>
     </div>
 
     <div class="w-full ml-4">
-        <div class="rounded-lg bg-blue-950 p-3">
+        <div class="rounded-lg bg-blue-950 p-3 h-full">
             Tasks
         </div>
     </div>
 </div>
 
 <script>
-function click() {
-  var copyURL = document.getElementById("url");
+    function click() {
+        var copyURL = document.getElementById("url");
 
-  copyURL.select();
-  copyURL.setSelectionRange(0, 99999);
+        copyURL.select();
+        copyURL.setSelectionRange(0, 99999);
 
-}
+    }
 </script>
 
 {% endblock %}
