@@ -6,6 +6,7 @@ from django.contrib import admin
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import CustomUser
+from .models import Profile
 
 class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
@@ -25,3 +26,4 @@ class UserAdmin(BaseUserAdmin):
     
 
 admin.site.register(CustomUser, UserAdmin)
+admin.site.register(Profile)

@@ -8,12 +8,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'src/styles.css' %}">
-    <title>Document</title>
-    <style>
-        .marg {
-            margin: 0.75rem;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'src/input_field.css' %}">
+    <title>Login</title>
 </head>
 
 <body class="bg-gray-900 flex justify-center items-center h-screen">
@@ -52,12 +48,5 @@
             </button>
             <p class="ml-4 mt-2">Don't have an account? Click <a class="text-green-400 underline" href="{% url 'signup' %}">here</a></p>
         </form>
-        <!-- {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %} -->
     </div>
 </body>

@@ -19,9 +19,9 @@
 {% endif %}
 
 <div class="grid grid-cols-4 gap-4 mt-4">
-  {% for course in courses %}
-  <div class="max-w-xs">
-    <div class="relative bg-blue-950 shadow-lg rounded-lg p-5 overflow-hidden">
+  {% for subject in subject %}
+  <div class="max-w-xs" >
+    <div class="relative bg-blue-950 shadow-lg rounded-lg p-5 overflow-hidden" >
       <svg class="absolute top-0 right-0" width="158" height="119" aria-hidden="true">
         <defs>
           <linearGradient x1="50%" y1="0%" x2="50%" y2="96.22%" id="a">
@@ -122,13 +122,13 @@
       </svg>
       <div class="relative pt-[6.25rem] pb-14">
         <div class="text-xs font-bold uppercase text-green-400 tracking-widest mb-2">Course</div>
-        <h3 class="text-2xl font-extrabold text-indigo-50 leading-snug mb-2">{{ course.title }}</h3>
-        <p class="text-indigo-200">{{ course.summary }}</p>
+        <h3 class="text-2xl font-extrabold text-indigo-50 leading-snug mb-2">{{ subject.title }}</h3>
+        <p class="text-indigo-200">{{ subject.summary }}</p>
       </div>
 
       <div class="relative text-right">
         <a class="inline-flex w-11 h-11 justify-center items-center bg-green-400 hover:bg-green-300 text-pink-50 hover:text-white rounded-full transition duration-150"
-          href="#0"><span class="sr-only">Study</span> <span class="font-bold -mt-px">-></span></a>
+        href="{% url 'course' subject.id %}"><span class="sr-only">Study</span> <span class="font-bold -mt-px">-></span></a>
       </div>
       <div class="">
         {{ course.students.all|length }}

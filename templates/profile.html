@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="mt-14 w-full text-white flex flex-row">
+    <div class="w-96">
+        <div class="bg-blue-950 p-3 rounded-lg">
+            <div class="flex flex-row content-center">
+                <img class="rounded-full" src="{{ profile.image.url }}" width="50" alt="avatar">
+                <p class="text-xl ml-2">{{ profile.user.name }} {{ profile.user.surname }}</p>
+            </div>
+            <div class="mt-4">
+                <p class="text-sm mt-4">{{ profile.user.created_at }}</p>
+            </div>
+        </div>
+        <div class="bg-blue-950 p-3 rounded-lg mt-4">
+            <p class="text-xl">Your courses</p>
+            <div class="my-2 grid grid-cols-4 gap-2">
+                <div class="text-sm bg-green-400 rounded-lg p-2">1</div>
+                <div class="text-sm bg-green-400 rounded-lg p-2">2</div>
+                <div class="text-sm bg-green-400 rounded-lg p-2">3</div>
+                <div class="text-sm bg-green-400 rounded-lg p-2">4</div>
+                <div class="text-sm bg-green-400 rounded-lg p-2">5</div>
+                <div class="text-sm bg-green-400 rounded-lg p-2">6</div>
+                <div class="text-sm bg-green-400 rounded-lg p-2">7</div>
+                <div class="text-sm bg-green-400 rounded-lg p-2">8</div>
+                <div class="text-sm bg-green-400 rounded-lg p-2">9</div>
+
+            </div>
+        </div>
+        <div class="bg-blue-950 p-3 rounded-lg mt-4">
+            <p class="text-xl">Your teachers</p>
+            <div class="my-2 grid grid-cols-4 gap-2">
+                <div class="text-sm bg-green-400 rounded-lg p-2">1</div>
+                <div class="text-sm bg-green-400 rounded-lg p-2">2</div>
+                <div class="text-sm bg-green-400 rounded-lg p-2">3</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full ml-4">
+        <div class="rounded-lg bg-blue-950 p-3">
+            <p class="text-xl">About</p>
+            <p class="text-sm mt-4">Email: {{ profile.user.email }}</p>
+            <p class="text-sm mt-4">Password: {{ profile.user.password }}</p>
+            <div class="mt-4"><a href="{% url 'logout' %}" class="mt-6 text-red-600">Logout</a></div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

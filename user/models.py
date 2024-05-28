@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission, BaseUserManager
 from django.core.validators import EmailValidator
 import datetime
-
+from django.utils.text import slugify
 
 
 class CustomUserManger(BaseUserManager):
@@ -35,8 +35,6 @@ class CustomUserManger(BaseUserManager):
         return user
     
 
-
-
 class CustomUser(AbstractUser):
     is_student = models.BooleanField(default=True)
     is_teacher = models.BooleanField(default=False)
@@ -62,12 +60,28 @@ class CustomUser(AbstractUser):
             self.username = f'{self.name} {self.surname}'
         super().save(*args, **kwargs)
 
-
     def  __str__(self):
         return f'{self.name} {self.surname} {self.email}'
 
     def __repr__(self):
         return f'{self.name} {self.surname} {self.email}'
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='profile_images', default='default_profile.jpg')
+    slug=models.SlugField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.user.email.split('@')[0])
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.slug} {self.user.name}"
+
+
 
 
     
