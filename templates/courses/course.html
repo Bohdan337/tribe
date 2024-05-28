@@ -5,8 +5,22 @@
     <h1 class="text-2xl text-white">{{ subject.title }}</h1>
 </div>
 
-<div class="mt-4 p-3 bg-blue-950 rounded-lg flex text-white">
-    {{ subject.summary }}
+<div class="mt-4 w-full text-white flex flex-row">
+    <div class="w-96">
+        <div class="bg-blue-950 p-3 rounded-lg">
+            <p class="text-xl">{{ subject.summary }}</p>
+
+        </div>
+        <div class="bg-blue-950 p-3 rounded-lg mt-4">
+            <p class="text-xl">Course link</p>
+        </div>
+    </div>
+
+    <div class="w-full ml-4">
+        <div class="rounded-lg bg-blue-950 p-3">
+            Tasks
+        </div>
+    </div>
 </div>
 
 {% endblock %}
