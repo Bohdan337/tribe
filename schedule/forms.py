@@ -4,8 +4,8 @@ from django.forms.widgets import Input
 from user.models import CustomUser
 
 
-class ScheduleForm(forms.Form):
+class ScheduleForm(forms.ModelForm):
 
     class Meta:
         model = Schedule
-        fields = ['datetime', 'duration', 'link']
+        fields = ['duration', 'link']
