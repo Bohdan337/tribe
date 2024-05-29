@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from .forms import CourseForm, AddStudentForm
+from .models import Subject
+from user.models import CustomUser
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 
