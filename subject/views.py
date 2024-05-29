@@ -40,6 +40,7 @@ def course_url(request, id):
     from .models import Subject
     course = get_object_or_404(Subject, pk=id)
     course.students.add(request.user)
+    course.save()
     print(course.students.all())
 
     return redirect('course', id=id)
