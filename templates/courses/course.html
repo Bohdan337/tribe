@@ -9,7 +9,7 @@
     <div class="w-96">
         <div class="bg-blue-950 p-3 rounded-lg">
             <p class="text-xl">About</p>
-            <p class="text-sm">{{ subject.summary }}</p>
+            <p class="text-sm break-words" style="overflow-wrap: break-word;">{{ subject.summary }}</p>
         </div>
         <div class="bg-blue-950 p-3 rounded-lg mt-4">
             <p class="text-xl">Course link</p>
@@ -31,13 +31,13 @@
                     href="{% url 'course' subject.id %}">
                     <span class="font-bold -mt-px">+</span></button>
             </div>
-            <div id="modelConfirm" class="bg-blue-950 w-full rounded-lg hidden">
+            <div id="modelConfirm" class="w-full hidden">
                 <div class="relative mx-auto rounded-md max-w-md">
                     <div class=" pt-0 text-center">
-                        <div class="text-xl font-normal text-white mt-5">Plan a meeting</div>
+                        <div class="text-xl font-bold text-white mt-5">Plan a meeting</div>
                         <form method="post">
                             {% csrf_token %}
-                            
+
                             <div class="w-full">
                                 {{ form.title }}
                                 {{ form.summary }}
@@ -60,6 +60,26 @@
 
                 </div>
             </div>
+            <div id="scheduleList" class="w-full mt-5">
+                {% if schedules %}
+                {% for schedule in schedules %}
+                <div class="rounded-lg border-gray-900 border-4 p-2">
+                    <div class="flex felx-row justify-between">
+                        <p class="text-white text-xl">{{ schedule.title }}</p>
+                        <a href="{{ schedule.link }}"
+                            class="text-green-400 text-sm underline">Link</a>
+                    </div> 
+                    <hr class="border-gray-900 border rounded-lg my-2">
+                    <p class="text-white text-sm">{{ schedule.summary }}</p>
+                    <p class="text-white text-sm">Description: {{ schedule.description }}</p>
+                    <hr class="border-gray-900 border rounded-lg my-2">
+                    <p class="text-white text-sm">{{ schedule.datetime }}</p>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="text-l text-white my-2">You don't have any meetings</div>
+                {% endif %}
+            </div>
         </div>
     </div>
     <div class="w-full ml-4">
@@ -73,12 +93,12 @@
     window.openModal = function (modalId) {
         document.getElementById(modalId).style.display = 'block'
         document.getElementById(modalId).classList.remove('hidden')
-        // document.getElementsByTagName('body')[0].classList.add('overflow-y-hidden')
+        document.getElementById('scheduleList').classList.add('hidden')
     }
 
     window.closeModal = function (modalId) {
         document.getElementById(modalId).style.display = 'none'
-        // document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
+        document.getElementById('scheduleList').classList.remove('hidden')
     }
 
 
