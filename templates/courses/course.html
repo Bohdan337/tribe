@@ -23,20 +23,66 @@
                 </svg>
             </button>
         </div>
-        <div class="bg-blue-950 p-3 rounded-lg mt-4 flex flex-row justify-between">
-            <p class="text-xl">Planned meetings</p>
-            <a class="inline-flex w-11 h-11 justify-center items-center bg-green-400 hover:bg-green-300 text-pink-50 hover:text-white rounded-full transition duration-150"
-                href="{% url 'course' subject.id %}"><span class="sr-only">Study</span> <span
-                    class="font-bold -mt-px">+</span></a>
+        <div class="bg-blue-950 p-3 rounded-lg mt-4 flex flex-col">
+            <div class="flex flex-row justify-between">
+                <p class="text-xl">Planned meetings</p>
+                <button onclick="openModal('modelConfirm')"
+                    class="inline-flex w-11 h-11 justify-center items-center bg-green-400 hover:bg-green-300 text-pink-50 hover:text-white rounded-full transition duration-150"
+                    href="{% url 'course' subject.id %}">
+                    <span class="font-bold -mt-px">+</span></button>
+            </div>
+            <div id="modelConfirm" class="bg-blue-950 w-full rounded-lg hidden">
+                <div class="relative mx-auto rounded-md max-w-md">
+                    <div class=" pt-0 text-center">
+                        <div class="text-xl font-normal text-white mt-5">Plan a meeting</div>
+                        <form method="post">
+                            {% csrf_token %}
+                            
+                            <div class="w-full">
+                                {{ form.title }}
+                                {{ form.summary }}
+                                {{ form.duration }}
+                                {{ form.link }}
+                            </div>
+
+                            <div class="flex flex-row justify-between p-2">
+                                <button onclick="closeModal('modelConfirm')"
+                                    class="text-white bg-gray-900 hover:bg-blue-950 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center">
+                                    Cancel
+                                </button>
+                                <button onclick="closeModal('modelConfirm')" id="submitForm" type="button"
+                                    class="text-white bg-green-400 hover:bg-green-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center">
+                                    Confirm
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
-
     <div class="w-full ml-4">
         <div class="rounded-lg bg-blue-950 p-3 h-full">
             Tasks
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    window.openModal = function (modalId) {
+        document.getElementById(modalId).style.display = 'block'
+        document.getElementById(modalId).classList.remove('hidden')
+        // document.getElementsByTagName('body')[0].classList.add('overflow-y-hidden')
+    }
+
+    window.closeModal = function (modalId) {
+        document.getElementById(modalId).style.display = 'none'
+        // document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
+    }
+
+
+</script>
 
 <script>
     function click() {

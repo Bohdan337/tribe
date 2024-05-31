@@ -7,6 +7,8 @@ from subject.models import Subject
 
 
 class Schedule(models.Model):
+    title = models.CharField(max_length=255, null=True)
+    description = models.CharField(max_length=512, blank=True, null=True)
     subject=models.ForeignKey(Subject, on_delete=models.CASCADE)
     datetime = models.DateTimeField(null=False, blank=False, default=timezone.now)
     duration = models.IntegerField(null=False, blank=False, default=0)

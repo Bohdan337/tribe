@@ -10,8 +10,12 @@ from django.shortcuts import get_object_or_404
 @login_required
 def course(request, id):
     from .models import Subject
+    from .forms import ScheduleForm
+
     subject = get_object_or_404(Subject, pk=int(id))
-    context = {'subject': subject}
+    form = ScheduleForm()
+    context = {'subject': subject,
+               'form': form}
 
     return render(request, 'courses/course.html', context=context)
 

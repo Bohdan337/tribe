@@ -1,6 +1,6 @@
 from django import forms
 from .models import Subject
-from django.forms.widgets import Input
+from django.forms.widgets import Input, TimeInput, URLInput
 from user.models import CustomUser
 
 class CourseForm(forms.ModelForm, forms.Form):
@@ -21,3 +21,9 @@ class AddStudentForm(forms.Form):
         model = Subject
         fields = ['students']
 
+
+class ScheduleForm(forms.Form):
+    title = forms.CharField(max_length=255, widget=Input(attrs={'class': 'h-12 rounded-lg p-2 bg-gray-900 text-white', 'placeholder': 'Title'}))
+    summary = forms.CharField(max_length=1024, widget=Input(attrs={'class': 'h-12 rounded-lg p-2 bg-gray-900 text-white', 'placeholder': 'Description'}))
+    duration = forms.TimeField(widget=TimeInput(attrs={'class': 'h-12 rounded-lg p-2 bg-gray-900 text-white', 'placeholder': 'Duration'}))
+    link = forms.URLField(widget=URLInput(attrs={'class': 'h-12 rounded-lg p-2 bg-gray-900 text-white', 'placeholder': 'URL'}))
