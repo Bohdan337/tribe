@@ -15,7 +15,6 @@ def course(request, id):
 
     subject = get_object_or_404(Subject, pk=int(id))
     schedules = Schedule.objects.filter(subject=subject).all()
-    print(schedules)
     form = ScheduleForm()
 
     context = {'subject': subject,

@@ -62,22 +62,21 @@
             </div>
             <div id="scheduleList" class="w-full mt-5">
                 {% if schedules %}
-                {% for schedule in schedules %}
-                <div class="rounded-lg border-gray-900 border-4 p-2">
-                    <div class="flex felx-row justify-between">
-                        <p class="text-white text-xl">{{ schedule.title }}</p>
-                        <a href="{{ schedule.link }}"
-                            class="text-green-400 text-sm underline">Link</a>
-                    </div> 
-                    <hr class="border-gray-900 border rounded-lg my-2">
-                    <p class="text-white text-sm">{{ schedule.summary }}</p>
-                    <p class="text-white text-sm">Description: {{ schedule.description }}</p>
-                    <hr class="border-gray-900 border rounded-lg my-2">
-                    <p class="text-white text-sm">{{ schedule.datetime }}</p>
-                </div>
-                {% endfor %}
+                    {% for schedule in schedules %}
+                        <div class="rounded-lg border-gray-900 border-4 p-2">
+                            <div class="flex felx-row justify-between">
+                                <p class="text-white text-xl">{{ schedule.title }}</p>
+                                <a href="{{ schedule.link }}" class="text-green-400 text-sm underline">Link</a>
+                            </div>
+                            <hr class="border-gray-900 border rounded-lg my-2">
+                            <p class="text-white text-sm">{{ schedule.summary }}</p>
+                            <p class="text-white text-sm">Description: {{ schedule.description }}</p>
+                            <hr class="border-gray-900 border rounded-lg my-2">
+                            <p class="text-white text-sm">{{ schedule.datetime }}</p>
+                        </div>
+                    {% endfor %}
                 {% else %}
-                <div class="text-l text-white my-2">You don't have any meetings</div>
+                    <div class="text-l text-white my-2">You don't have any meetings</div>
                 {% endif %}
             </div>
         </div>
@@ -101,6 +100,25 @@
         document.getElementById('scheduleList').classList.remove('hidden')
     }
 
+    $(document).ready(function(){
+		$('#submitForm').on('click', function(){
+			let formData=$('form').serialize()
+
+			$.ajax({
+				url:"{% url 'create_schedule' %}",
+				type: 'POST',
+				data: formData,
+				success:function (data){
+					console.log('success', data)
+					$('#scheduleList').prepend(data.html)
+					$('form')[0].reset()
+				},
+				error:function (data){
+					console.log('error')
+				}
+			})
+		})
+    })
 
 </script>
 
