@@ -5,7 +5,7 @@
 
 > ## Get template code
 > ```
-> git clone _____________
+> git clone HEADache297/tribe
 > ```
 
 > ## Initialize virtual environment
@@ -18,4 +18,14 @@
 > ## Install requirements.txt
 > ```
 > pip install -r requirements.txt
+> ```
+
+> ## Create superuser
+> ```
+> python manage.py createsuperuser --username=<admin> --email=<admin@example.com>
+> ```
+
+> ## Run localy (make sure port 8000 is free to use)
+> ```
+> python manage.py runserver
 > ```
