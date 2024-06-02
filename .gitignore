@@ -4,6 +4,8 @@ __pycache__/
 *$py.class
 
 staticfiles
+static/media/profile_images/*
+
 # C extensions
 *.so
 
