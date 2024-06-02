@@ -28,5 +28,6 @@ class CustomLoginForm(AuthenticationForm):
     captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
 
 
-
+class ChangeImageForm(forms.Form):
+    image = forms.ImageField()
 

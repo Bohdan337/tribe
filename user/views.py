@@ -62,8 +62,18 @@ def login_views(request):
 
 def profile(request, slug):
     from .models import Profile
+    from .forms import ChangeImageForm
 
     profile = get_object_or_404(Profile, slug=slug)
-    context = {'profile': profile}
+    form = ChangeImageForm()
+
+    context = {'profile': profile,
+               'form': form}
+    
+    if request.method == "POST":
+        form = ChangeImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            profile.image = form.cleaned_data.get('image')
+            profile.save()
 
     return render(request, 'profile.html', context=context)
