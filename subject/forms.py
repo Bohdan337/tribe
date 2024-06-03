@@ -27,7 +27,7 @@ class MaterialForm(forms.ModelForm):
 
     class Meta:
         model = Material
-        fields = ['description', 'title']
+        fields = ['title', 'description']
 
 
 class MaterialFileForm(forms.ModelForm):

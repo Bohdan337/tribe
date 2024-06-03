@@ -14,11 +14,34 @@ from django.forms import modelformset_factory
 
 @login_required
 def course(request, id):
-    from .models import Subject
     subject = get_object_or_404(Subject, pk=int(id))
-    context = {'subject': subject}
+    MaterialFileFormSet = modelformset_factory(MaterialFile, form=MaterialFileForm, extra=1)    
 
-    return render(request, 'courses/course.html', context=context)
+    if request.method == 'POST':
+        material_form = MaterialForm(request.POST)
+        file_formset = MaterialFileFormSet(request.POST, request.FILES, queryset=MaterialFile.objects.none())
+
+        if material_form.is_valid() and file_formset.is_valid():
+            material = material_form.save(commit=False)
+            material.subject = subject
+            material.save()
+
+            for form in file_formset.cleaned_data:
+                if form:
+                    file = form['file']
+                    material_file = MaterialFile(material=material, file=file)
+                    material_file.save()
+
+            return redirect('course', id=subject.id)
+    else:
+        material_form = MaterialForm()
+        file_formset = MaterialFileFormSet(queryset=MaterialFile.objects.none())
+
+    return render(request, 'courses/course.html', {
+        'material_form': material_form,
+        'file_formset': file_formset,
+        'subject': subject
+    })
 
 @login_required
 def create_course(request):
@@ -61,38 +84,6 @@ def add_student(request, subject_id):
         form = AddStudentForm()
     return render(request, 'add_student.html', {'form': form, 'subject': subject})
 
-
-
-
-def save_material(request, subject_id):
-    subject = get_object_or_404(Subject, id=subject_id)
-    MaterialFileFormSet = modelformset_factory(MaterialFile, form=MaterialFileForm, extra=3)  # Adjust 'extra' as needed
-
-    if request.method == 'POST':
-        material_form = MaterialForm(request.POST)
-        file_formset = MaterialFileFormSet(request.POST, request.FILES, queryset=MaterialFile.objects.none())
-
-        if material_form.is_valid() and file_formset.is_valid():
-            material = material_form.save(commit=False)
-            material.subject = subject
-            material.save()
-
-            for form in file_formset.cleaned_data:
-                if form:
-                    file = form['file']
-                    material_file = MaterialFile(material=material, file=file)
-                    material_file.save()
-
-            return redirect('subject_detail', subject_id=subject.id)
-    else:
-        material_form = MaterialForm()
-        file_formset = MaterialFileFormSet(queryset=MaterialFile.objects.none())
-
-    return render(request, 'upload_material.html', {
-        'material_form': material_form,
-        'file_formset': file_formset,
-        'subject': subject
-    })
 
 
 

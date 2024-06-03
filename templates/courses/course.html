@@ -31,14 +31,55 @@
     </div>
 </div>
 
+
+    <h2>Add Material</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="">
+            {{ material_form.title }}
+        </div>
+
+        <div class="">
+            {{ material_form.description }}
+        </div>
+
+        {{ file_formset.management_form }}
+        {% for form_file in file_formset %}
+            {{ form_file.file }}
+        {% endfor %}
+        <button type="submit">Upload</button>
+    </form>
+    
+
+
+
+
+
+
+    <h2>Materials</h2>
+    <ul>
+        {% for material in subject.materials.all %}
+            <li>
+                <strong>{{ material.title }}</strong> - {{ material.description }}
+                <ul>
+                    {% for file in material.files.all %}
+                        <li><a href="{{ file.file.url }}">{{ file.file.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
 <script>
 function click() {
   var copyURL = document.getElementById("url");
 
   copyURL.select();
   copyURL.setSelectionRange(0, 99999);
-
 }
+
 </script>
 
 {% endblock %}
