@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'subject',
     'schedule',
 
+    'tinymce',
     'crispy_forms',
     'crispy_tailwind',
     'captcha',
@@ -147,3 +148,22 @@ MEDIA_ROOT = os.path.join(STATIC_URL, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'user.CustomUser'
+
+
+TINYMCE_DEFAULT_CONFIG = {
+    'height': 250,
+    'width': 540,
+    'selector': 'textarea',
+    'toolbar': '''
+        fullscreen preview bold italic underline | fontselect,
+        fontsizeselect  | forecolor backcolor | alignleft alignright |
+        aligncenter alignjustify | indent outdent | bullist numlist table 
+    ''',
+    'content_style': "/static/src/tinymce/content.css",
+    'content_css': '/static/src/tinymce/content.css', 
+    'menubar': False,
+    'statusbar': False,
+    
+}
+
+

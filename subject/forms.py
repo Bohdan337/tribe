@@ -2,6 +2,8 @@ from django import forms
 from .models import Subject, Material, MaterialFile
 from django.forms.widgets import Input
 from user.models import CustomUser
+from tinymce.widgets import TinyMCE
+
 
 
 class CourseForm(forms.ModelForm, forms.Form):
@@ -24,6 +26,11 @@ class AddStudentForm(forms.Form):
 
 
 class MaterialForm(forms.ModelForm):
+    title = forms.CharField(max_length=255, widget=Input(attrs={'class': 'h-12 rounded-lg p-2 bg-gray-900 text-white w-96', 'placeholder': 'Title'}))
+    description = forms.CharField(widget=TinyMCE(attrs={
+        'class': 'm-2 h-12 rounded-lg p-2 bg-gray-900 text-white', 
+        'placeholder': 'Description'
+    }))
 
     class Meta:
         model = Material
@@ -31,7 +38,6 @@ class MaterialForm(forms.ModelForm):
 
 
 class MaterialFileForm(forms.ModelForm):
-
     class Meta:
         model = MaterialFile
         fields = ['file']
