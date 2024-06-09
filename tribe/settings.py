@@ -166,4 +166,4 @@ TINYMCE_DEFAULT_CONFIG = {
     
 }
 
-
+LOGIN_URL = '/login'

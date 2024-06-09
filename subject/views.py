@@ -95,7 +95,7 @@ def create_course(request):
     return render(request, 'courses/create_course.html', {'form': form})
 
 
-
+@login_required
 def add_student(request, subject_id):
     subject = get_object_or_404(Subject, id=subject_id)
     if request.method == 'POST':
@@ -113,11 +113,6 @@ def add_student(request, subject_id):
         form = AddStudentForm()
     return render(request, 'add_student.html', {'form': form, 'subject': subject})
 
-
-
-
-
-
-
-
-
+@login_required
+def course_url(request):
+    return redirect('homepage')

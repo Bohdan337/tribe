@@ -15,9 +15,9 @@
         display: flex;
         justify-content: space-between;
         align-items: baseline;
-      }
+    }
 
-    #material-form{
+    #material-form {
         display: none;
         transition: all 0.5s ease;
     }
@@ -49,11 +49,11 @@
         <div class="bg-blue-950 p-3 rounded-lg mt-4 flex flex-col">
             <div class="flex flex-row justify-between">
                 <p class="text-xl">Planned meetings</p>
-                <button onclick="openModal('modelConfirm')"
+                <button onclick="openScheduleForm()"
                     class="inline-flex w-11 h-11 justify-center items-center bg-green-400 hover:bg-green-300 text-pink-50 hover:text-white rounded-full transition duration-150">
                     <span class="font-bold -mt-px">+</span></button>
             </div>
-            <div id="modelConfirm" class="w-full hidden">
+            <div id="scheduleForm" class="w-full hidden">
                 <div class="relative mx-auto rounded-md max-w-md">
                     <div class=" pt-0 text-center">
                         <div class="text-xl font-bold text-white mt-5">Plan a meeting</div>
@@ -68,11 +68,11 @@
                             </div>
 
                             <div class="flex flex-row justify-between p-2">
-                                <button onclick="closeModal('modelConfirm')"
+                                <button onclick="closeScheduleForm()"
                                     class="text-white bg-gray-900 hover:bg-blue-950 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center">
                                     Cancel
                                 </button>
-                                <button onclick="closeModal('modelConfirm')" id="submitForm" type="submit"
+                                <button onclick="closeScheduleForm()" type="submit"
                                     class="text-white bg-green-400 hover:bg-green-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center">
                                     Confirm
                                 </button>
@@ -84,173 +84,164 @@
             </div>
             <div id="scheduleList" class="w-full mt-5">
                 {% if schedules %}
-                    {% for schedule in schedules %}
-                        <div class="rounded-lg border-gray-900 border-4 p-2 my-2">
-                            <div class="flex felx-row justify-between">
-                                <p class="text-white text-xl">{{ schedule.title }}</p>
-                                <a href="{{ schedule.url }}" class="text-green-400 text-sm underline" target="_blank">Link</a>
-                            </div>
-                            <hr class="border-gray-900 border rounded-lg my-2">
-                            <p class="text-white text-sm">{{ schedule.summary }}</p>
-                            <p class="text-white text-sm">Description: {{ schedule.description }}</p>
-                            <hr class="border-gray-900 border rounded-lg my-2">
-                            <p class="text-white text-sm">{{ schedule.datetime }}</p>
-                        </div>
-                    {% endfor %}
+                {% for schedule in schedules %}
+                <div class="rounded-lg border-gray-900 border-4 p-2 my-2">
+                    <div class="flex felx-row justify-between">
+                        <p class="text-white text-xl">{{ schedule.title }}</p>
+                        <a href="{{ schedule.url }}" class="text-green-400 text-sm underline" target="_blank">Link</a>
+                    </div>
+                    <hr class="border-gray-900 border rounded-lg my-2">
+                    <p class="text-white text-sm">{{ schedule.summary }}</p>
+                    <p class="text-white text-sm">Description: {{ schedule.description }}</p>
+                    <hr class="border-gray-900 border rounded-lg my-2">
+                    <p class="text-white text-sm">{{ schedule.datetime }}</p>
+                </div>
+                {% endfor %}
                 {% else %}
-                    <div class="text-l text-white my-2" id="scheduleText">You don't have any meetings</div>
+                <div class="text-l text-white my-2" id="scheduleText">You don't have any meetings</div>
                 {% endif %}
             </div>
-        </div>
-        <div id="material-form-btn" class="bg-blue-950 hover:bg-green-400 text-white font-bold py-2 px-4 rounded mt-4">
-            Add Materials
         </div>
     </div>
     <div class="w-full ml-4">
-        <div class="rounded-lg bg-blue-950 p-3 h-full">
-            <div class="flex flex-row">
-                <button class="bg-gray-900 text-white p-2 rounded-lg" onclick="tasks()">
-                    Tasks
-                </button>
-                <button class="bg-gray-900 text-white p-2 ml-2 rounded-lg" onclick="students()">
-                    Students
-                </button>
+        <div class="rounded-lg bg-blue-950 p-3">
+            <div class="flex flex-row justify-between">
+                <div class="justify-between">
+                    <button class="bg-gray-900 text-white p-2 rounded-lg" onclick="tasks()">
+                        Tasks
+                    </button>
+                    <button class="bg-gray-900 text-white p-2 ml-2 rounded-lg" onclick="students()">
+                        Students
+                    </button>
+                </div>
+                <button
+                    class="inline-flex w-8 h-8 justify-center items-center bg-green-400 hover:bg-green-300 text-pink-50 hover:text-white rounded-full transition duration-150"
+                    onclick="openTaskForm()">+</button>
             </div>
-            <div class="bg-gray-900 rounded-lg w-full h-full my-2" id="tasksTab">
-                Tasks
+            <div class="w-full my-2" id="tasksTab">
+                <div>
+                    {% for material in subject.materials.all %}
+                        <div class="rounded-lg border-gray-900 border-4 p-2 my-2">
+                            <div class="text-xl">{{ material.title }}</div>
+                            <hr class="border-gray-900 border rounded-lg my-2">
+                            {{ material.description|safe }}
+                            {% for file in material.files.all %}
+                                {% if file.file.url.lower|slice:"-4:" == ".pdf" %}
+                                    <embed src="{% static file.file.url %}" type="application/pdf">
+                                {% elif file.file.url.lower|slice:"-4:" == ".jpg" or file.file.url.lower|slice:"-4:" == ".png" or file.file.url.lower|slice:"-4:" == ".gif" %}
+                                    <img src="{{ file.file.url }}" width="200px" />
+                                {% elif file.file.url.lower|slice:"-4:" == ".mp4" or file.file.url.lower|slice:"-5:" == ".webm" %}
+                                    <video width="320" height="240" controls>
+                                        <source src="{{ file.file.url }}" type="video/{{ file.file.url.lower|slice:" -3:" }}">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                {% elif file.file.url.lower|slice:"-4:" == ".mp3" or file.file.url.lower|slice:"-4:" == ".wav" %}
+                                    <audio controls>
+                                        <source src="{{ file.file.url }}" type="audio/{{ file.file.url.lower|slice:" -3:" }}">
+                                        Your browser does not support the audio element.
+                                    </audio>
+                                {% else %}
+                                    <p>File type not supported for preview. <a href="{{ file.file.url }}">Download</a></p>
+                                {% endif %}
+                            {% endfor %}
+                            <hr class="border-gray-900 border rounded-lg my-2">
+                            {{ material.created_at }}
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
-            <div class="bg-gray-900 rounded-lg w-full h-full my-2 hidden" id="studentsTab">
+            <div class="bg-gray-900 rounded-lg w-full my-2 hidden" id="studentsTab">
                 Students
+            </div>
+            <div class="my-2 hidden" id="materialForm">
+                <div class="bg-blue-950 mt-14 rounded-lg w-max">
+                    <h2 class="font-bold text-3xl mb-3 ml-3 text-white self-center">Add Material</h2>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="">
+                            {{ material_form.title }}
+                        </div>
+
+                        <div class="ms-3 me-3">
+                            {{ material_form.media }}
+                            {{ material_form.description }}
+                        </div>
+
+                        <div class="chose-file">
+                            {{ file_formset.management_form }}
+                            {% for form_file in file_formset %}
+                            {{ form_file.file }}
+                            {% endfor %}
+                            <button type="submit"
+                                class="bg-gray-900 hover:bg-green-400 text-white font-bold py-2 px-4 rounded mx-4 mt-4"
+                                onclick="closeTaskForm()">Upload</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-
-<div class="bg-blue-950 mt-14 rounded-lg w-max" id="material-form">
-    <h2 class="font-bold text-3xl mb-3 ml-3 text-white self-center">Add Material</h2>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-
-        <div class="">
-            {{ material_form.title }}
-        </div>
-
-        <div class="ms-3 me-3">
-            {{ material_form.media }}
-            {{ material_form.description }}
-        </div>
-
-        <div class="chose-file">
-            {{ file_formset.management_form }}
-            {% for form_file in file_formset %}
-                {{ form_file.file }}
-            {% endfor %}
-            <button type="submit" class="bg-gray-900 hover:bg-green-400 text-white font-bold py-2 px-4 rounded mx-4 mt-4 ">Upload</button>
-        </div>
-    </form>
-</div>
-
-<div style="background-color: aliceblue;">
-    {% for material in subject.materials.all %}
-        <div style="display: flex; flex-direction: column; margin-top: 150px;    ">
-            {{ material.title }}
-            {{ material.description|safe }}
-            {% for file in material.files.all %}
-                <p><a href="{{ file.file.url }}">{{ file.file.name }}</a></p>
-                {% if file.file.url.lower|slice:"-4:" == ".pdf" %}
-                    <embed src="{% static file.file.url %}" type="application/pdf" style="width: 400px; height: 300px;">  
-                {% elif file.file.url.lower|slice:"-4:" == ".jpg" or file.file.url.lower|slice:"-4:" == ".png" or file.file.url.lower|slice:"-4:" == ".gif" %}
-                    <img src="{{ file.file.url }}" width="200px"/>
-                {% elif file.file.url.lower|slice:"-4:" == ".mp4" or file.file.url.lower|slice:"-5:" == ".webm" %}
-                    <video width="320" height="240" controls>
-                        <source src="{{ file.file.url }}" type="video/{{ file.file.url.lower|slice:"-3:" }}">
-                        Your browser does not support the video tag.
-                    </video>
-                {% elif file.file.url.lower|slice:"-4:" == ".mp3" or file.file.url.lower|slice:"-4:" == ".wav" %}
-                    <audio controls>
-                        <source src="{{ file.file.url }}" type="audio/{{ file.file.url.lower|slice:"-3:" }}">
-                        Your browser does not support the audio element.
-                    </audio>
-                {% else %}
-                    <p>File type not supported for preview. <a href="{{ file.file.url }}">Download</a></p>
-                {% endif %}
-            {% endfor %}
-        </div>
-    {% endfor %}
-</div>
-
-</div>
-
-
-
 <script type="text/javascript">
-    window.openModal = function (modalId) {
-        document.getElementById(modalId).style.display = 'block'
-        document.getElementById(modalId).classList.remove('hidden')
-        document.getElementById('scheduleList').classList.add('hidden')
+    function openScheduleForm(modalId) {
+        $('#scheduleForm').removeClass('hidden')
+        $('#scheduleList').addClass('hidden')
     }
 
-    window.closeModal = function (modalId) {
-        document.getElementById(modalId).style.display = 'none'
-        document.getElementById('scheduleList').classList.remove('hidden')
+    function closeScheduleForm(modalId) {
+        $('#scheduleForm').addClass('hidden')
+        $('#scheduleList').removeClass('hidden')
     }
 
     function tasks() {
-        document.getElementById('tasksTab').classList.remove('hidden')
-        document.getElementById('studentsTab').classList.add('hidden')
+        $('#tasksTab').removeClass('hidden')
+        $('#studentsTab').addClass('hidden')
+        $('#materialForm').addClass('hidden')
     }
 
     function students() {
-        document.getElementById('studentsTab').classList.remove('hidden')
-        document.getElementById('tasksTab').classList.add('hidden')
+        $('#studentsTab').removeClass('hidden')
+        $('#tasksTab').addClass('hidden')
+        $('#materialForm').addClass('hidden')
+    }
+
+    function openTaskForm() {
+        $('#studentsTab').addClass('hidden')
+        $('#tasksTab').addClass('hidden')
+        $('#materialForm').removeClass('hidden')
+    }
+    function closeTaskForm() {
+        $('#tasksTab').removeClass('hidden')
+        $('#materialForm').addClass('hidden')
     }
 
 
-    $(document).ready(function(){
-		$('#scheduleForm').submit(function(event){
+    $(document).ready(function () {
+        $('#scheduleForm').submit(function (event) {
             event.preventDefault()
             document.getElementById('scheduleText').classList.add('hidden')
-			// let formData=$('form').serialize()
+            // let formData=$('form').serialize()
             let formData = new FormData(this)
 
-			$.ajax({
-				url:"{% url 'create_schedule' subject_id=subject.id %}",
-				type: 'POST',
-				data: formData,
+            $.ajax({
+                url: "{% url 'create_schedule' subject_id=subject.id %}",
+                type: 'POST',
+                data: formData,
                 contentType: false,
                 processData: false,
-				success:function (data){
-					console.log('success', data)
-					$('#scheduleList').prepend(data.html)
-					$('form')[0].reset()
-				},
-				error:function (data){
-					console.log('error', data)
-				}
-			})
-		})
+                success: function (data) {
+                    console.log('success', data)
+                    $('#scheduleList').prepend(data.html)
+                    $('form')[0].reset()
+                },
+                error: function (data) {
+                    console.log('error', data)
+                }
+            })
+        })
     })
-
-</script>
-
-<script>
-    function click() {
-        var copyURL = document.getElementById("url");
-
-  copyURL.select();
-  copyURL.setSelectionRange(0, 99999);
-}
-
-
-
-$(document).ready(function() {
-    $("#material-form-btn").click(function() {
-        $(this).fadeOut(300, function() {
-            $("#material-form").css("display", "block").hide().fadeIn(300);
-        });
-    });
-});
 
 </script>
 
