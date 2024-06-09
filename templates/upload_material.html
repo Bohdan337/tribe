@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ material_form.as_p }}
+    {{ file_formset.management_form }}
+    {% for form in file_formset %}
+        {{ form.as_p }}
+    {% endfor %}
+    <button type="submit">Upload</button>
+</form>
+
+{% endblock %}

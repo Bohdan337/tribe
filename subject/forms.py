@@ -1,7 +1,8 @@
 from django import forms
-from .models import Subject
+from .models import Subject, Material, MaterialFile
 from django.forms.widgets import Input, TimeInput, URLInput
 from user.models import CustomUser
+
 
 class CourseForm(forms.ModelForm, forms.Form):
     title = forms.CharField(max_length=255, widget=Input(attrs={'class': 'm-3 h-12 rounded-lg p-2 bg-gray-900 text-white', 'placeholder': 'Title'}))
@@ -20,4 +21,21 @@ class AddStudentForm(forms.Form):
     class Meta:
         model = Subject
         fields = ['students']
+
+
+class MaterialForm(forms.ModelForm):
+
+    class Meta:
+        model = Material
+        fields = ['description', 'title']
+
+
+class MaterialFileForm(forms.ModelForm):
+
+    class Meta:
+        model = MaterialFile
+        fields = ['file']
+
+
+
 
