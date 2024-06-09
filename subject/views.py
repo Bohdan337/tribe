@@ -54,22 +54,3 @@ def course_url(request, id):
     print(course.students.all())
 
     return redirect('course', id=id)
-
-
-
-# def add_student(request, subject_id):
-#     subject = get_object_or_404(Subject, id=subject_id)
-#     if request.method == 'POST':
-#         form = AddStudentForm(request.POST)
-#         if form.is_valid():
-#             email = form.cleaned_data['email']
-#             try:
-#                 student = CustomUser.objects.get(email=email, is_student=True)
-#                 subject.students.add(student)
-#                 messages.success(request, 'Студента успішно додано.')
-#             except CustomUser.DoesNotExist:
-#                 messages.error(request, 'Студента не знайдено або він не є студентом.')
-#         return redirect('subject_detail', subject_id=subject.id)
-#     else:
-#         form = AddStudentForm()
-#     return render(request, 'add_student.html', {'form': form, 'subject': subject})

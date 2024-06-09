@@ -83,17 +83,18 @@
     <div class="w-full ml-4">
         <div class="rounded-lg bg-blue-950 p-3 h-full">
             <div class="flex flex-row">
-                <a class="bg-gray-900 text-white p-2 rounded-lg" href="/">
+                <button class="bg-gray-900 text-white p-2 rounded-lg" onclick="tasks()">
                     Tasks
-                </a>
-                <a class="bg-gray-900 text-white p-2 ml-2 rounded-lg" href="/">
+                </button>
+                <button class="bg-gray-900 text-white p-2 ml-2 rounded-lg" onclick="students()">
                     Students
-                </a>
+                </button>
             </div>
-            <div class="bg-gray-900 rounded-lg w-full h-full my-2">
-                {% block window %}
-
-                {% endblock %}
+            <div class="bg-gray-900 rounded-lg w-full h-full my-2" id="tasksTab">
+                Tasks
+            </div>
+            <div class="bg-gray-900 rounded-lg w-full h-full my-2 hidden" id="studentsTab">
+                Students
             </div>
         </div>
     </div>
@@ -111,6 +112,15 @@
         document.getElementById('scheduleList').classList.remove('hidden')
     }
 
+    function tasks() {
+        document.getElementById('tasksTab').classList.remove('hidden')
+        document.getElementById('studentsTab').classList.add('hidden')
+    }
+
+    function students() {
+        document.getElementById('studentsTab').classList.remove('hidden')
+        document.getElementById('tasksTab').classList.add('hidden')
+    }
 
 
     $(document).ready(function(){
