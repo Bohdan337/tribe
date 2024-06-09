@@ -10,4 +10,5 @@ urlpatterns = [
     path('', include('subject.urls')),
     path('', include('schedule.urls')),
     path('captcha/', include('captcha.urls')),
+    path('tinymce/', include('tinymce.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

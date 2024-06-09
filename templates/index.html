@@ -7,18 +7,6 @@
     href="{% url 'create_course' %}">+</a>
 </div>
 
-{% if messages %}
-<div class="messages">
-  <ul class="messages">
-    {% for message in messages %}
-    <li class="bg-blue-950 text-white p-2 rounded my-2 {{ message.tags }}">
-      {{ message }}
-    </li>
-    {% endfor %}
-  </ul>
-</div>
-{% endif %}
-
 <div class="grid grid-cols-4 gap-4 mt-4">
   {% for subject in subject %}
   <div class="max-w-xs">

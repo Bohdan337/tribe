@@ -1,6 +1,29 @@
 {% extends "base.html" %}
 
+
+{% load static %}
 {% block content %}
+<style>
+    .chose-file input {
+        border: 1px solid rgb(255, 255, 255);
+        border-radius: 5px;
+        color: aliceblue;
+        width: 40%;
+    }
+
+    .chose-file {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+      }
+
+    #material-form{
+        display: none;
+        transition: all 0.5s ease;
+    }
+</style>
+
+
 <div class="p-3 bg-blue-950 mt-14 rounded-lg flex flex-row justify-between">
     <h1 class="text-2xl text-white">{{ subject.title }}</h1>
 </div>
@@ -79,6 +102,9 @@
                 {% endif %}
             </div>
         </div>
+        <div id="material-form-btn" class="bg-blue-950 hover:bg-green-400 text-white font-bold py-2 px-4 rounded mt-4">
+            Add Materials
+        </div>
     </div>
     <div class="w-full ml-4">
         <div class="rounded-lg bg-blue-950 p-3 h-full">
@@ -99,6 +125,64 @@
         </div>
     </div>
 </div>
+
+
+<div class="bg-blue-950 mt-14 rounded-lg w-max" id="material-form">
+    <h2 class="font-bold text-3xl mb-3 ml-3 text-white self-center">Add Material</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="">
+            {{ material_form.title }}
+        </div>
+
+        <div class="ms-3 me-3">
+            {{ material_form.media }}
+            {{ material_form.description }}
+        </div>
+
+        <div class="chose-file">
+            {{ file_formset.management_form }}
+            {% for form_file in file_formset %}
+                {{ form_file.file }}
+            {% endfor %}
+            <button type="submit" class="bg-gray-900 hover:bg-green-400 text-white font-bold py-2 px-4 rounded mx-4 mt-4 ">Upload</button>
+        </div>
+    </form>
+</div>
+
+<div style="background-color: aliceblue;">
+    {% for material in subject.materials.all %}
+        <div style="display: flex; flex-direction: column; margin-top: 150px;    ">
+            {{ material.title }}
+            {{ material.description|safe }}
+            {% for file in material.files.all %}
+                <p><a href="{{ file.file.url }}">{{ file.file.name }}</a></p>
+                {% if file.file.url.lower|slice:"-4:" == ".pdf" %}
+                    <embed src="{% static file.file.url %}" type="application/pdf" style="width: 400px; height: 300px;">  
+                {% elif file.file.url.lower|slice:"-4:" == ".jpg" or file.file.url.lower|slice:"-4:" == ".png" or file.file.url.lower|slice:"-4:" == ".gif" %}
+                    <img src="{{ file.file.url }}" width="200px"/>
+                {% elif file.file.url.lower|slice:"-4:" == ".mp4" or file.file.url.lower|slice:"-5:" == ".webm" %}
+                    <video width="320" height="240" controls>
+                        <source src="{{ file.file.url }}" type="video/{{ file.file.url.lower|slice:"-3:" }}">
+                        Your browser does not support the video tag.
+                    </video>
+                {% elif file.file.url.lower|slice:"-4:" == ".mp3" or file.file.url.lower|slice:"-4:" == ".wav" %}
+                    <audio controls>
+                        <source src="{{ file.file.url }}" type="audio/{{ file.file.url.lower|slice:"-3:" }}">
+                        Your browser does not support the audio element.
+                    </audio>
+                {% else %}
+                    <p>File type not supported for preview. <a href="{{ file.file.url }}">Download</a></p>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+
+</div>
+
+
 
 <script type="text/javascript">
     window.openModal = function (modalId) {
@@ -154,10 +238,20 @@
     function click() {
         var copyURL = document.getElementById("url");
 
-        copyURL.select();
-        copyURL.setSelectionRange(0, 99999);
+  copyURL.select();
+  copyURL.setSelectionRange(0, 99999);
+}
 
-    }
+
+
+$(document).ready(function() {
+    $("#material-form-btn").click(function() {
+        $(this).fadeOut(300, function() {
+            $("#material-form").css("display", "block").hide().fadeIn(300);
+        });
+    });
+});
+
 </script>
 
 {% endblock %}
