@@ -16,6 +16,11 @@
         justify-content: space-between;
         align-items: baseline;
       }
+
+    #material-form{
+        display: none;
+        transition: all 0.5s ease;
+    }
 </style>
 
 
@@ -40,6 +45,9 @@
                 </svg>
             </button>
         </div>
+        <div id="material-form-btn" class="bg-blue-950 hover:bg-green-400 text-white font-bold py-2 px-4 rounded mt-4">
+            Add Materials
+        </div>
     </div>
 
     <div class="w-full ml-4">
@@ -49,7 +57,8 @@
     </div>
 </div>
 
-<div class="bg-blue-950 mt-14 rounded-lg w-max">
+
+<div class="bg-blue-950 mt-14 rounded-lg w-max" id="material-form">
     <h2 class="font-bold text-3xl mb-3 ml-3 text-white self-center">Add Material</h2>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -102,19 +111,6 @@
     {% endfor %}
 </div>
 
-    <!-- <h2>Materials</h2>  
-    <ul>
-        {% for material in subject.materials.all %}
-            <li>
-                <strong>{{ material.title }}</strong> - {{ material.description }}
-                <ul>
-                    {% for file in material.files.all %}
-                        <li><a href="{{ file.file.url }}">{{ file.file.name }}</a></li>
-                    {% endfor %}
-                </ul>
-            </li>
-        {% endfor %}
-    </ul> -->
 </div>
 
 
@@ -126,6 +122,17 @@ function click() {
   copyURL.select();
   copyURL.setSelectionRange(0, 99999);
 }
+
+
+
+$(document).ready(function() {
+    $("#material-form-btn").click(function() {
+        $(this).fadeOut(300, function() {
+            $("#material-form").css("display", "block").hide().fadeIn(300);
+        });
+    });
+});
+
 </script>
 
 {% endblock %}

@@ -32,6 +32,7 @@ def course(request, id):
                     material_file = MaterialFile(material=material, file=file)
                     material_file.save()
 
+            messages.success(request, 'Material and files have been successfully added.')
             return redirect('course', id=subject.id)
     else:
         material_form = MaterialForm()
