@@ -75,14 +75,26 @@
                         </div>
                     {% endfor %}
                 {% else %}
-                    <div class="text-l text-white my-2">You don't have any meetings</div>
+                    <div class="text-l text-white my-2" id="scheduleText">You don't have any meetings</div>
                 {% endif %}
             </div>
         </div>
     </div>
     <div class="w-full ml-4">
         <div class="rounded-lg bg-blue-950 p-3 h-full">
-            Tasks
+            <div class="flex flex-row">
+                <a class="bg-gray-900 text-white p-2 rounded-lg" href="/">
+                    Tasks
+                </a>
+                <a class="bg-gray-900 text-white p-2 ml-2 rounded-lg" href="/">
+                    Students
+                </a>
+            </div>
+            <div class="bg-gray-900 rounded-lg w-full h-full my-2">
+                {% block window %}
+
+                {% endblock %}
+            </div>
         </div>
     </div>
 </div>
@@ -104,6 +116,7 @@
     $(document).ready(function(){
 		$('#scheduleForm').submit(function(event){
             event.preventDefault()
+            document.getElementById('scheduleText').classList.add('hidden')
 			// let formData=$('form').serialize()
             let formData = new FormData(this)
 
