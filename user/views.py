@@ -6,7 +6,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, get_list_or_404
 
 
 
@@ -63,12 +63,24 @@ def login_views(request):
 def profile(request, slug):
     from .models import Profile
     from .forms import ChangeImageForm
+    from subject.models import Subject
 
     profile = get_object_or_404(Profile, slug=slug)
+    
+    subjects = get_list_or_404(Subject, students=profile.user)
+
+    teachers = []
+    for subject in subjects:
+        teachers.append(subject.teacher.name)
+    res = []
+    [res.append(x) for x in teachers if x not in res]
+
     form = ChangeImageForm()
 
     context = {'profile': profile,
-               'form': form}
+               'form': form,
+               'subjects': subjects,
+               'teachers': res}
     
     if request.method == "POST":
         form = ChangeImageForm(request.POST, request.FILES)
