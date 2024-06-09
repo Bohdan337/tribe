@@ -25,6 +25,27 @@ class AddStudentForm(forms.Form):
         fields = ['students']
 
 
+
+class MultipleFileInput(forms.ClearableFileInput):
+    allow_multiple_selected = True
+
+
+class MultipleFileField(forms.FileField):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("widget", MultipleFileInput())
+        super().__init__(*args, **kwargs)
+
+    def clean(self, data, initial=None):
+        single_file_clean = super().clean
+        if isinstance(data, (list, tuple)):
+            result = [single_file_clean(d, initial) for d in data]
+        else:
+            result = [single_file_clean(data, initial)]
+        return result
+
+
+
+
 class MaterialForm(forms.ModelForm):
     title = forms.CharField(max_length=255, widget=Input(attrs={'class': 'h-12 rounded-lg p-2 bg-gray-900 text-white w-96', 'placeholder': 'Title'}))
     description = forms.CharField(widget=TinyMCE(attrs={
@@ -38,9 +59,12 @@ class MaterialForm(forms.ModelForm):
 
 
 class MaterialFileForm(forms.ModelForm):
+    file = MultipleFileField()
+
     class Meta:
         model = MaterialFile
         fields = ['file']
+        # widgets = {'file' : forms.ClearableFileInput(attrs={'allow_multiple_selected': True})}
 
 
 

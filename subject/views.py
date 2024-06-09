@@ -12,8 +12,25 @@ from django.forms import modelformset_factory
 
 
 
+
+
 @login_required
 def course(request, id):
+    """
+    The `course` function in Python handles the creation of materials and files for a specific subject
+    in a course.
+    
+    :param request: The `request` parameter in the `course` function is an HttpRequest object that
+    represents the current HTTP request. It contains information about the request made by the client,
+    such as the request method (GET, POST, etc.), request data, user session information, and more. In
+    this function, the
+    :param id: The `id` parameter in the `course` function is used to identify the specific Subject
+    object for which the course materials are being managed. It is used to retrieve the Subject object
+    from the database using `get_object_or_404` and then associate the course materials with that
+    particular subject
+    :return: The `course` view function returns a rendered HTML template named 'courses/course.html'
+    along with the context data containing `material_form`, `file_formset`, and `subject`.
+    """
     subject = get_object_or_404(Subject, pk=int(id))
     MaterialFileFormSet = modelformset_factory(MaterialFile, form=MaterialFileForm, extra=1)    
 
@@ -28,9 +45,11 @@ def course(request, id):
 
             for form in file_formset.cleaned_data:
                 if form:
-                    file = form['file']
-                    material_file = MaterialFile(material=material, file=file)
-                    material_file.save()
+                    files = form['file']
+
+                    for f in files:
+                        material_file = MaterialFile(material=material, file=f)
+                        material_file.save()
 
             messages.success(request, 'Material and files have been successfully added.')
             return redirect('course', id=subject.id)
