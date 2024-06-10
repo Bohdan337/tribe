@@ -31,3 +31,6 @@ class CustomLoginForm(AuthenticationForm):
 class ChangeImageForm(forms.Form):
     image = forms.ImageField()
 
+
+class UserSearchForm(forms.Form):
+    email = forms.CharField(max_length=255, widget=Input(attrs={'class': 'm-2 h-36 rounded-lg p-2 bg-gray-900 text-white', 'placeholder' : 'user email..'}))

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<style>
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #4A5568; /* Темно-сірий фон для заголовків */
+    color: white;
+}
+
+td {
+    border: 1px solid #4A5568; /* Границя для кожної клітинки */
+}
+
+/* Ефект "зебри" для рядків */
+tbody tr:nth-child(odd) {
+    background-color: #2D3748; /* Темний фон для непарних рядків */
+}
+
+tbody tr:nth-child(even) {
+    background-color: #1A202C; /* Трохи світліший фон для парних рядків */
+}
+
+tbody tr:hover {
+    background-color: #4A5568; /* Колір фону при наведенні на рядок */
+    color: white;
+}
+
+</style>
+
+
+<div class="bg-blue-950 rounded-lg mt-14 mx-auto" style="width: 750px">
+    <h1 class="text-2xl text-white font-bold ml-4 mt-4">Select user to change</h1>
+
+    <form method="get" action="{% url 'admin_panel' %}" class="flex mt-4 items-center space-x-2 ml-4" id="search-form">
+        <svg stroke="currentColor" fill="white" stroke-width="0" viewBox="0 0 24 24" height="1.9em" width="1.9em" xmlns="http://www.w3.org/2000/svg"><path d="M10,18c1.846,0,3.543-0.635,4.897-1.688l4.396,4.396l1.414-1.414l-4.396-4.396C17.365,13.543,18,11.846,18,10 c0-4.411-3.589-8-8-8s-8,3.589-8,8S5.589,18,10,18z M10,4c3.309,0,6,2.691,6,6s-2.691,6-6,6s-6-2.691-6-6S6.691,4,10,4z"></path><path d="M11.412,8.586C11.791,8.966,12,9.468,12,10h2c0-1.065-0.416-2.069-1.174-2.828c-1.514-1.512-4.139-1.512-5.652,0 l1.412,1.416C9.346,7.83,10.656,7.832,11.412,8.586z"></path></svg>
+        {{ search_form.email }}    
+        <button class="bg-gray-900 hover:bg-green-400 text-white font-bold py-2 px-3 rounded">Search</button>
+    </form>
+
+    {% if users %}
+        <div class="overflow-x-auto bg-gray-900 rounded-md ml-4 mt-4 mr-4">
+            <table class="min-w-full bg-gray-900 text-white">
+                <thead>
+                    <tr>
+                        <th class="px-4 py-2">Id</th>
+                        <th class="px-4 py-2">Email</th>
+                        <th class="px-4 py-2">Name</th>
+                        <th class="px-4 py-2">Surname</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr class="border-t border-gray-700">
+                            <td class="px-4 py-2">{{ user.id }}</td>
+                            <td class="px-4 py-2">{{ user.email }}</td>
+                            <td class="px-4 py-2">{{ user.name }}</td>
+                            <td class="px-4 py-2">{{ user.surname }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="ml-4 mt-4 text-white">No users found.</p>
+    {% endif %}
+</div>
+
+
+{% endblock %}

@@ -3,11 +3,13 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .forms import CustomUserCreationForm, CustomLoginForm
 from django.shortcuts import render, HttpResponse, redirect
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.shortcuts import get_object_or_404, get_list_or_404
-
+from .forms import UserSearchForm
+from .models import CustomUser
 
 
 
@@ -89,3 +91,29 @@ def profile(request, slug):
             profile.save()
 
     return render(request, 'profile.html', context=context)
+
+
+@login_required
+def admin_panel(request):
+    if not request.user.is_chief_teacher or not request.user.is_superuser:
+        messages.info(request, 'You are not authorized to admin panel.')
+        return redirect('homepage')
+
+    form = UserSearchForm()
+    users = CustomUser.objects.all()  
+
+    if 'email' in request.GET:
+        form = UserSearchForm(request.GET)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            if email:
+                try:
+                    user = CustomUser.objects.get(email=email)
+                    users = [user]
+                except CustomUser.DoesNotExist:
+                    users = CustomUser.objects.all()  
+                    messages.error(request, 'Користувача не знайдено')
+            else:
+                users = CustomUser.objects.all()
+
+    return render(request, 'admin_panel/panel.html', {'search_form': form, 'users': users})
