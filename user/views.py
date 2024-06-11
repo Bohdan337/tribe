@@ -1,14 +1,13 @@
 
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import CustomUserCreationForm, CustomLoginForm
+from .forms import CustomUserCreationForm, CustomLoginForm, UserSearchForm, UserUpdateForm
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.shortcuts import get_object_or_404, get_list_or_404
-from .forms import UserSearchForm
 from .models import CustomUser
 
 
@@ -93,12 +92,22 @@ def profile(request, slug):
     return render(request, 'profile.html', context=context)
 
 
-@login_required
-def admin_panel(request):
-    if not request.user.is_chief_teacher or not request.user.is_superuser:
-        messages.info(request, 'You are not authorized to admin panel.')
-        return redirect('homepage')
 
+
+def chief_teacher_required(view_func):
+    def wrapped_view(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('login')  
+        if not (request.user.is_chief_teacher or request.user.is_superuser):
+            messages.info(request, 'You are not authorized to access the admin panel.')
+            return redirect('homepage')  
+        return view_func(request, *args, **kwargs)
+    return wrapped_view
+
+
+
+@chief_teacher_required
+def admin_panel(request):
     form = UserSearchForm()
     users = CustomUser.objects.all()  
 
@@ -112,8 +121,30 @@ def admin_panel(request):
                     users = [user]
                 except CustomUser.DoesNotExist:
                     users = CustomUser.objects.all()  
-                    messages.error(request, 'Користувача не знайдено')
+                    messages.error(request, 'User not found')
             else:
                 users = CustomUser.objects.all()
 
     return render(request, 'admin_panel/panel.html', {'search_form': form, 'users': users})
+
+@chief_teacher_required
+def panel_user_detail(request, user_id):
+    user = get_object_or_404(CustomUser, id=user_id)
+    
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'User data updated successfully')
+            return redirect('admin_panel')
+    else:
+        form = UserUpdateForm(instance=user)
+    
+    return render(request, 'admin_panel/user_detail.html', {'form': form, 'user': user})
+
+@chief_teacher_required
+def delete_user(request, user_id):
+    user = get_object_or_404(CustomUser, id=user_id)
+    user.delete()
+    messages.success(request, 'User deleted successfully')
+    return redirect('admin_panel')

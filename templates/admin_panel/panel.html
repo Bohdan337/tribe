@@ -49,7 +49,7 @@ tbody tr:hover {
     </form>
 
     {% if users %}
-        <div class="overflow-x-auto bg-gray-900 rounded-md ml-4 mt-4 mr-4">
+        <div class="overflow-x-auto bg-gray-900 rounded-md m-4">
             <table class="min-w-full bg-gray-900 text-white">
                 <thead>
                     <tr>
@@ -63,7 +63,9 @@ tbody tr:hover {
                     {% for user in users %}
                         <tr class="border-t border-gray-700">
                             <td class="px-4 py-2">{{ user.id }}</td>
-                            <td class="px-4 py-2">{{ user.email }}</td>
+                            <td class="px-4 py-2">
+                                <a href="{% url 'user_detail' user.id %}" class="text-blue-500 hover:underline">{{ user.email }}</a>
+                            </td>
                             <td class="px-4 py-2">{{ user.name }}</td>
                             <td class="px-4 py-2">{{ user.surname }}</td>
                         </tr>
@@ -71,6 +73,7 @@ tbody tr:hover {
                 </tbody>
             </table>
         </div>
+        <h3 class="text-white ml-4">users: {{ users.all|length }}</h3>
     {% else %}
         <p class="ml-4 mt-4 text-white">No users found.</p>
     {% endif %}

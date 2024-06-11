@@ -34,3 +34,14 @@ class ChangeImageForm(forms.Form):
 
 class UserSearchForm(forms.Form):
     email = forms.CharField(max_length=255, widget=Input(attrs={'class': 'm-2 h-36 rounded-lg p-2 bg-gray-900 text-white', 'placeholder' : 'user email..'}))
+
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['email', 'name', 'surname', 'is_student', 'is_teacher']
+        widgets = {
+            'email': forms.EmailInput(attrs={'class': 'm-2 h-36 rounded-lg p-2 bg-blue-950 text-white', 'placeholder': 'user email..'}),
+            'name': forms.TextInput(attrs={'class': 'm-2 h-36 rounded-lg p-2 bg-blue-950 text-white', 'placeholder': "user's name.."}),
+            'surname': forms.TextInput(attrs={'class': 'm-2 h-36 rounded-lg p-2 bg-blue-950 text-white', 'placeholder': "user's surname.."}),
+        }
