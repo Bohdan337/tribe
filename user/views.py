@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.auth.decorators import login_required
 
 
 
@@ -125,3 +126,27 @@ def activate_user(request, uid, token):
     else:
         messages.success(request, "Invalid activation link")
     return redirect('homepage')
+
+
+@login_required
+def change_password(request):
+    from .forms import UpdatePasswordForm
+
+    form = UpdatePasswordForm(request.user)
+    if request.method == 'POST':
+        form = UpdatePasswordForm(request.user, request.POST)
+        if request.method == 'POST':
+            form = UpdatePasswordForm(request.user, request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Your password has been changed!')
+
+                return redirect('login')
+            else:
+                for key, error in list(form.errors.items()):
+                    if key == 'captcha' and error[0] == 'This field is required.':
+                        messages.error(request, 'Please complete the ReCaptcha!')
+                        continue
+                    messages.error(request, error)
+
+    return render(request, 'users/change_password.html', {'form': form})

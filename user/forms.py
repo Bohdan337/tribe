@@ -1,6 +1,6 @@
 from django import forms
 from .models import CustomUser
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, SetPasswordForm
 from django.forms.widgets import Input, PasswordInput, EmailInput
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV2Checkbox
@@ -28,5 +28,9 @@ class CustomLoginForm(AuthenticationForm):
     captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
 
 
-
+class UpdatePasswordForm(SetPasswordForm):
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
+    class Meta:
+        model=CustomUser
+        fields= ['new_password1', 'new_password2']
 
