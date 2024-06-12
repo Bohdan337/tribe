@@ -33,11 +33,14 @@ def course(request, id):
     """
     from schedule.models import Schedule
     from schedule.forms import ScheduleForm
+    from user.models import CustomUser
 
     subject = get_object_or_404(Subject, pk=int(id))
-    MaterialFileFormSet = modelformset_factory(MaterialFile, form=MaterialFileForm, extra=1)    
+    MaterialFileFormSet = modelformset_factory(MaterialFile, form=MaterialFileForm, extra=1)
+    materials = subject.materials.order_by("-created_at").all()
 
     if request.method == 'POST':
+
         material_form = MaterialForm(request.POST)
         file_formset = MaterialFileFormSet(request.POST, request.FILES, queryset=MaterialFile.objects.none())
 
@@ -67,10 +70,29 @@ def course(request, id):
         'material_form': material_form,
         'file_formset': file_formset,
         'subject': subject,
+        'materials': materials,
         'schedules': schedules,
-        'form': form
+        'form': form,
     })
+
+@login_required
+def students_search(request):
+    from django.http import JsonResponse
+    from django.template.loader import render_to_string
+
+    if request.method == 'POST':
+        search_data = request.POST.get('search')
+        if search_data:
+            if '@' in search_data:
+                students = CustomUser.objects.filter(email__contains=search_data).all()
+            else:
+                students = CustomUser.objects.filter(name__contains=search_data).all()
+            html = render_to_string('courses/students_search.html', {'students': students})
+            print(students_search)
+
+            return JsonResponse({'status': 'success', 'html': html})
     
+    return JsonResponse({'status': 'failed', 'error': 'invalid request'}), 400
 
 @login_required
 def create_course(request):
@@ -113,6 +135,7 @@ def add_student(request, subject_id):
         form = AddStudentForm()
     return render(request, 'add_student.html', {'form': form, 'subject': subject})
 
+# --------------------------------
 @login_required
 def course_url(request):
     return redirect('homepage')

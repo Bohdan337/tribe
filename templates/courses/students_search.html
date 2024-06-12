@@ -1,0 +1,10 @@
+{% for student in students %}
+<div class="rounded-lg border-gray-900 border-4 p-2 my-2">
+    <div class="text-xl">{{ student.name }} {{ student.surname }}</div>
+    <hr class="border-gray-900 border rounded-lg my-2">
+    {{ student.email }}
+</div>
+{% empty %}
+    <div class="text-xl my-2">No such students</div>
+{% endfor %}
+

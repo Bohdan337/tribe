@@ -11,13 +11,11 @@ def create_schedule(request, subject_id):
     subject = get_object_or_404(Subject, pk=subject_id)
     if request.method == 'POST':
         form = ScheduleForm(request.POST)
-        # print(form)
         if form.is_valid():
             schedule = form.save(commit=False)
-            messages.success(request, 'Schedule created successfully!')
             schedule.subject = subject
             schedule.save()
-            print(schedule)
+            messages.success(request, 'Schedule created successfully!')
             html = render_to_string('courses/schedule_template.html', {'schedule': schedule})
 
             return JsonResponse({'status': 'success', 'html': html})

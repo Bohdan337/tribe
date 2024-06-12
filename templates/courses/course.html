@@ -38,7 +38,7 @@
             <p class="text-xl">Course link</p>
             <button onclick="click()"
                 class="w-full flex flex-row rounded-lg p-3 bg-green-400 mt-4 justify-between hover:bg-green-300">
-                <p id="url">/course/connect/{{ subject.id }}</p>
+                <p id="url">/course/connect/...</p>
                 <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                     <path fill="#fff"
@@ -53,7 +53,7 @@
                     class="inline-flex w-11 h-11 justify-center items-center bg-green-400 hover:bg-green-300 text-pink-50 hover:text-white rounded-full transition duration-150">
                     <span class="font-bold -mt-px">+</span></button>
             </div>
-            <div id="scheduleForm" class="w-full hidden">
+            <div id="schedule" class="w-full hidden">
                 <div class="relative mx-auto rounded-md max-w-md">
                     <div class=" pt-0 text-center">
                         <div class="text-xl font-bold text-white mt-5">Plan a meeting</div>
@@ -84,21 +84,21 @@
             </div>
             <div id="scheduleList" class="w-full mt-5">
                 {% if schedules %}
-                {% for schedule in schedules %}
-                <div class="rounded-lg border-gray-900 border-4 p-2 my-2">
-                    <div class="flex felx-row justify-between">
-                        <p class="text-white text-xl">{{ schedule.title }}</p>
-                        <a href="{{ schedule.url }}" class="text-green-400 text-sm underline" target="_blank">Link</a>
-                    </div>
-                    <hr class="border-gray-900 border rounded-lg my-2">
-                    <p class="text-white text-sm">{{ schedule.summary }}</p>
-                    <p class="text-white text-sm">Description: {{ schedule.description }}</p>
-                    <hr class="border-gray-900 border rounded-lg my-2">
-                    <p class="text-white text-sm">{{ schedule.datetime }}</p>
-                </div>
-                {% endfor %}
+                    {% for schedule in schedules %}
+                        <div class="rounded-lg border-gray-900 border-4 p-2 my-2">
+                            <div class="flex felx-row justify-between">
+                                <p class="text-white text-xl">{{ schedule.title }}</p>
+                                <a href="{{ schedule.url }}" class="text-green-400 text-sm underline" target="_blank">Link</a>
+                            </div>
+                            <hr class="border-gray-900 border rounded-lg my-2">
+                            <p class="text-white text-sm">{{ schedule.summary }}</p>
+                            <p class="text-white text-sm">Description: {{ schedule.description }}</p>
+                            <hr class="border-gray-900 border rounded-lg my-2">
+                            <p class="text-white text-sm">{{ schedule.datetime }}</p>
+                        </div>
+                    {% endfor %}
                 {% else %}
-                <div class="text-l text-white my-2" id="scheduleText">You don't have any meetings</div>
+                    <div class="text-l text-white my-2" id="scheduleText">You don't have any meetings</div>
                 {% endif %}
             </div>
         </div>
@@ -107,10 +107,10 @@
         <div class="rounded-lg bg-blue-950 p-3">
             <div class="flex flex-row justify-between">
                 <div class="justify-between">
-                    <button class="bg-gray-900 text-white p-2 rounded-lg" onclick="tasks()">
+                    <button class="bg-gray-900 text-white p-2 rounded-lg hover:bg-blue-900" onclick="tasks()">
                         Tasks
                     </button>
-                    <button class="bg-gray-900 text-white p-2 ml-2 rounded-lg" onclick="students()">
+                    <button class="bg-gray-900 text-white p-2 ml-2 rounded-lg hover:bg-blue-900" onclick="students()">
                         Students
                     </button>
                 </div>
@@ -120,7 +120,7 @@
             </div>
             <div class="w-full my-2" id="tasksTab">
                 <div>
-                    {% for material in subject.materials.all %}
+                    {% for material in materials %}
                         <div class="rounded-lg border-gray-900 border-4 p-2 my-2">
                             <div class="text-xl">{{ material.title }}</div>
                             <hr class="border-gray-900 border rounded-lg my-2">
@@ -150,8 +150,28 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="bg-gray-900 rounded-lg w-full my-2 hidden" id="studentsTab">
-                Students
+            <div class="rounded-lg w-full my-2 hidden" id="studentsTab">
+                <form method="post" id="studentsSearch">
+					{% csrf_token %}
+					<input class="bg-gray-900 rounded-lg p-2" style="margin: 0;" type="search" placeholder="Search" aria-label="Search" name="search">
+					<button class="inline-flex p-2 h-8 ml-2 justify-center items-center bg-green-400 hover:bg-green-300 text-pink-50 hover:text-white rounded-lg transition duration-150" type="submit">Search</button>
+				</form>
+                <div class="w-full" id="studentsList">
+                    {% if subject.students %}
+                        {% for student in subject.students.all %}
+                            <div class="rounded-lg border-gray-900 border-4 p-2 my-2">
+                                <div class="text-xl">{{ student.name }} {{ student.surname }}</div>
+                                <hr class="border-gray-900 border rounded-lg my-2">
+                                {{ student.email }}
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-xl my-2">This course is empty</div>
+                    {% endif %}
+                </div>
+                <div class="w-full hidden" id="studentsSearchList">
+                    
+                </div>
             </div>
             <div class="my-2 hidden" id="materialForm">
                 <div class="bg-blue-950 mt-14 rounded-lg w-max">
@@ -186,12 +206,12 @@
 
 <script type="text/javascript">
     function openScheduleForm(modalId) {
-        $('#scheduleForm').removeClass('hidden')
+        $('#schedule').removeClass('hidden')
         $('#scheduleList').addClass('hidden')
     }
 
     function closeScheduleForm(modalId) {
-        $('#scheduleForm').addClass('hidden')
+        $('#schedule').addClass('hidden')
         $('#scheduleList').removeClass('hidden')
     }
 
@@ -212,17 +232,16 @@
         $('#tasksTab').addClass('hidden')
         $('#materialForm').removeClass('hidden')
     }
+    
     function closeTaskForm() {
         $('#tasksTab').removeClass('hidden')
         $('#materialForm').addClass('hidden')
     }
 
-
     $(document).ready(function () {
         $('#scheduleForm').submit(function (event) {
             event.preventDefault()
-            document.getElementById('scheduleText').classList.add('hidden')
-            // let formData=$('form').serialize()
+            $('#scheduleText').addClass('hidden')
             let formData = new FormData(this)
 
             $.ajax({
@@ -241,6 +260,32 @@
                 }
             })
         })
+
+        $('#studentsSearch').submit(function (event) {
+            event.preventDefault()
+            $('#studentsList').addClass('hidden')
+            $('#studentsSearchList').removeClass('hidden')
+            let formData = new FormData(this)
+
+            $.ajax({
+                url: "{% url 'students_search' %}",
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    console.log('success', data)
+                    $('#studentsSearchList').empty()
+                    $('#studentsSearchList').prepend(data.html)
+                    $('form')[0].reset()
+                },
+                error: function (data) {
+                    console.log('error', data)
+                }
+            })
+        })
+
+        
     })
 
 </script>
