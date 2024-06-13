@@ -28,9 +28,28 @@ class CustomLoginForm(AuthenticationForm):
     captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
 
 
+
 class UpdatePasswordForm(SetPasswordForm):
     captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
     class Meta:
         model=CustomUser
         fields= ['new_password1', 'new_password2']
 
+class ChangeImageForm(forms.Form):
+    image = forms.ImageField()
+
+
+
+class UserSearchForm(forms.Form):
+    email = forms.CharField(max_length=255, widget=Input(attrs={'class': 'm-2 h-36 rounded-lg p-2 bg-gray-900 text-white', 'placeholder' : 'user email..'}))
+
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['email', 'name', 'surname', 'is_student', 'is_teacher']
+        widgets = {
+            'email': forms.EmailInput(attrs={'class': 'm-2 h-36 rounded-lg p-2 bg-blue-950 text-white', 'placeholder': 'user email..'}),
+            'name': forms.TextInput(attrs={'class': 'm-2 h-36 rounded-lg p-2 bg-blue-950 text-white', 'placeholder': "user's name.."}),
+            'surname': forms.TextInput(attrs={'class': 'm-2 h-36 rounded-lg p-2 bg-blue-950 text-white', 'placeholder': "user's surname.."}),
+        }

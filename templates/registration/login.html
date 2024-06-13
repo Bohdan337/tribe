@@ -15,19 +15,6 @@
 <body class="bg-gray-900 flex justify-center items-center h-screen">
     <div class="text-white p-4 bg-blue-950 rounded-lg">
         <p class="font-bold text-3xl mb-3 ml-3">Login</p>
-        
-        {% if messages %}
-            <div class="messages">
-                <ul class="messages">
-                    {% for message in messages %}
-                    <li class="bg-blue-950 text-white p-2 rounded my-2 {{ message.tags }}">
-                        {{ message }}
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
-
         <form method="post" class="form flex flex-col" action="{% url 'login' %}">
             {% csrf_token %}
             <div class="flex flex-row">
@@ -47,6 +34,7 @@
                 Login
             </button>
             <p class="ml-4 mt-2">Don't have an account? Click <a class="text-green-400 underline" href="{% url 'signup' %}">here</a></p>
+            <p class="ml-4 mt-2">Forget password? <a href="{% url 'change_user_password' %}" class="btn btn-warning">Reset!</a></p>
         </form>
     </div>
 </body>
