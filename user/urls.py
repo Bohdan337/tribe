@@ -14,6 +14,11 @@ urlpatterns = [
      path('panel/user/<int:user_id>/delete/', views.delete_user, name="delete_user"),
     path('profile/password/change', views.change_password, name='change_user_password'),
     path('activate/<uid>/<token>', views.activate_user, name='activate_user'),
+
+    path('users/students', views.admin_panel, {'user_type': 'student'}, name='student_panel'),
+    path('users/teachers', views.admin_panel, {'user_type': 'teacher'}, name='teacher_panel'),
+    path('user/<int:user_id>', views.panel_user_detail, name="user_detail"),
+     path('user/<int:user_id>/delete', views.delete_user, name="delete_user"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
