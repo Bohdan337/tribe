@@ -169,33 +169,12 @@ def delete_material(request, subject_id, material_id):
 @login_required
 def delete_schedule(request, subject_id, schedule_id):
     from schedule.models import Schedule
-def add_student(request, subject_id):
-    """
-    The `add_student` function adds a student to a subject based on a POST request with form data
-    containing the student's email.
-    
-    :param request: The `request` parameter in the `add_student` function is an HttpRequest object,
-    which contains metadata about the incoming request from the client, such as headers, method type
-    (GET, POST, etc.), and user session information. It is typically passed to view functions in Django
-    to process and respond to
-    :param subject_id: The `subject_id` parameter in the `add_student` function is used to identify the
-    specific subject to which a student is being added. It is passed as an argument to the function and
-    is used to retrieve the corresponding `Subject` object from the database using
-    `get_object_or_404(Subject
-    :return: The `add_student` function returns a rendered HTML template named 'add_student.html' along
-    with a form and the subject object. The form is used to add a student to a specific subject. If the
-    form is valid and the student is successfully added to the subject, a success message is displayed.
-    If the student is not found or is not a student, an error message is displayed. Finally,
-    """
-    subject = get_object_or_404(Subject, id=subject_id)
     if request.method == 'POST':
         try:
             Schedule.objects.filter(id=schedule_id).first().delete()
             return JsonResponse({'status': 'success'})
         except:
             return JsonResponse({'status': 'failed', 'error': 'invalid request'}), 400
-
-
 
 @login_required
 def course_url(request, subject_id):
