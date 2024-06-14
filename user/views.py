@@ -68,7 +68,7 @@ def login_views(request):
             if user is not None:
                 auth_login(request, user)
                 messages.success(request, f'Logged in successfully, {user.name}.')
-                return redirect('/login')
+                return redirect('/')
 
     else:
         form = CustomLoginForm()
