@@ -1,6 +1,12 @@
 {% for student in students %}
 <div class="rounded-lg border-gray-900 border-4 p-2 my-2">
-    <div class="text-xl">{{ student.name }} {{ student.surname }}</div>
+    <div class="flex flex-row justify-between">
+        <div class="text-xl">{{ student.name }} {{ student.surname }}</div>
+        <button class="inline-flex w-8 h-8 justify-center items-center bg-green-400 hover:bg-green-300 text-pink-50 hover:text-white rounded-full transition duration-150"
+        onclick="add(`{% url 'add_student' subject_id=subject.id student_id=student.id %}`, '{{ student.id }}', 'student')">
+            +
+        </button>
+    </div>
     <hr class="border-gray-900 border rounded-lg my-2">
     {{ student.email }}
 </div>
@@ -8,3 +14,18 @@
     <div class="text-xl my-2">No such students</div>
 {% endfor %}
 
+<script>
+    function add(url, id, item) {
+        $.ajax({
+            url: url,
+            type: 'POST',
+            success: function (data) {
+                console.log('success', data)
+                $(`#${item}-element-${id}`).remove()
+            },
+            error: function (data) {
+                console.log('error', data)
+            }
+        })
+    }
+</script>

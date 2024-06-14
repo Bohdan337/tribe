@@ -7,5 +7,12 @@
     <p class="text-white text-sm">{{ schedule.summary }}</p>
     <p class="text-white text-sm">Description: {{ schedule.description }}</p>
     <hr class="border-gray-900 border rounded-lg my-2">
-    <p class="text-white text-sm">{{ schedule.datetime }}</p>
+    <div class="flex flex-row justify-between">
+        <p class="text-white text-sm">{{ schedule.datetime }}</p>
+        {% if user.is_teacher %}
+            <button onclick="del(`{% url 'delete_schedule' subject_id=subject.id schedule_id=schedule.id %}`, '{{ schedule.id }}', 'schedule')">
+                DELETE
+            </button>
+        {% endif %}
+    </div>
 </div>

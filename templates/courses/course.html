@@ -30,10 +30,12 @@
 
 <div class="mt-4 w-full text-white flex flex-row">
     <div class="w-96">
+        <!-- SUMMARY -->
         <div class="bg-blue-950 p-3 rounded-lg">
             <p class="text-xl">About</p>
             <p class="text-sm break-words" style="overflow-wrap: break-word;">{{ subject.summary }}</p>
         </div>
+        <!-- COURSE LINK -->
         <div class="bg-blue-950 p-3 rounded-lg mt-4">
             <p class="text-xl">Course link</p>
             <button onclick="click()"
@@ -46,6 +48,7 @@
                 </svg>
             </button>
         </div>
+        <!-- SCHEDULE -->
         <div class="bg-blue-950 p-3 rounded-lg mt-4 flex flex-col">
             <div class="flex flex-row justify-between">
                 <p class="text-xl">Planned meetings</p>
@@ -85,7 +88,7 @@
             <div id="scheduleList" class="w-full mt-5">
                 {% if schedules %}
                     {% for schedule in schedules %}
-                        <div class="rounded-lg border-gray-900 border-4 p-2 my-2">
+                        <div class="rounded-lg border-gray-900 border-4 p-2 my-2" id="schedule-element-{{ schedule.id }}">
                             <div class="flex felx-row justify-between">
                                 <p class="text-white text-xl">{{ schedule.title }}</p>
                                 <a href="{{ schedule.url }}" class="text-green-400 text-sm underline" target="_blank">Link</a>
@@ -94,7 +97,14 @@
                             <p class="text-white text-sm">{{ schedule.summary }}</p>
                             <p class="text-white text-sm">Description: {{ schedule.description }}</p>
                             <hr class="border-gray-900 border rounded-lg my-2">
-                            <p class="text-white text-sm">{{ schedule.datetime }}</p>
+                            <div class="flex flex-row justify-between">
+                                <p class="text-white text-sm">{{ schedule.datetime }}</p>
+                                {% if user.is_teacher %}
+                                    <button onclick="del(`{% url 'delete_schedule' subject_id=subject.id schedule_id=schedule.id %}`, '{{ schedule.id }}', 'schedule')">
+                                        DELETE
+                                    </button>
+                                {% endif %}
+                            </div>
                         </div>
                     {% endfor %}
                 {% else %}
@@ -105,6 +115,7 @@
     </div>
     <div class="w-full ml-4">
         <div class="rounded-lg bg-blue-950 p-3">
+            <!-- TOP BAR -->
             <div class="flex flex-row justify-between">
                 <div class="justify-between">
                     <button class="bg-gray-900 text-white p-2 rounded-lg hover:bg-blue-900" onclick="tasks()">
@@ -118,11 +129,17 @@
                     class="inline-flex w-8 h-8 justify-center items-center bg-green-400 hover:bg-green-300 text-pink-50 hover:text-white rounded-full transition duration-150"
                     onclick="openTaskForm()">+</button>
             </div>
+            <!-- TASKS -->
             <div class="w-full my-2" id="tasksTab">
                 <div>
                     {% for material in materials %}
-                        <div class="rounded-lg border-gray-900 border-4 p-2 my-2">
-                            <div class="text-xl">{{ material.title }}</div>
+                        <div class="rounded-lg border-gray-900 border-4 p-2 my-2" id="task-element-{{ material.id }}">
+                            <div class="flex flex-row justify-between">
+                                <div class="text-xl">{{ material.title }}</div>
+                                <button onclick="del(`{% url 'delete_material' subject_id=subject.id material_id=material.id %}`, '{{ material.id }}', 'task')">
+                                    DELETE
+                                </button>
+                            </div>
                             <hr class="border-gray-900 border rounded-lg my-2">
                             {{ material.description|safe }}
                             {% for file in material.files.all %}
@@ -150,17 +167,25 @@
                     {% endfor %}
                 </div>
             </div>
+            <!-- STUDENTS -->
             <div class="rounded-lg w-full my-2 hidden" id="studentsTab">
-                <form method="post" id="studentsSearch">
+                {% if user.is_teacher %}
+                    <form method="post" id="studentsSearch">
 					{% csrf_token %}
 					<input class="bg-gray-900 rounded-lg p-2" style="margin: 0;" type="search" placeholder="Search" aria-label="Search" name="search">
 					<button class="inline-flex p-2 h-8 ml-2 justify-center items-center bg-green-400 hover:bg-green-300 text-pink-50 hover:text-white rounded-lg transition duration-150" type="submit">Search</button>
-				</form>
+				    </form>
+                {% endif %}
                 <div class="w-full" id="studentsList">
                     {% if subject.students %}
                         {% for student in subject.students.all %}
-                            <div class="rounded-lg border-gray-900 border-4 p-2 my-2">
-                                <div class="text-xl">{{ student.name }} {{ student.surname }}</div>
+                            <div class="rounded-lg border-gray-900 border-4 p-2 my-2" id="student-element-{{ student.id }}">
+                                <div class="flex flex-row justify-between">
+                                    <div class="text-xl">{{ student.name }} {{ student.surname }}</div>
+                                    <button onclick="del(`{% url 'delete_student' subject_id=subject.id student_id=student.id %}`, '{{ student.id }}', 'student')">
+                                        DELETE
+                                    </button>
+                                </div>
                                 <hr class="border-gray-900 border rounded-lg my-2">
                                 {{ student.email }}
                             </div>
@@ -173,6 +198,7 @@
                     
                 </div>
             </div>
+            <!-- MATERIAL FORM -->
             <div class="my-2 hidden" id="materialForm">
                 <div class="bg-blue-950 mt-14 rounded-lg w-max">
                     <h2 class="font-bold text-3xl mb-3 ml-3 text-white self-center">Add Material</h2>
@@ -238,6 +264,23 @@
         $('#materialForm').addClass('hidden')
     }
 
+    function del(url, id, item) {
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                },
+                success: function (data) {
+                    console.log('success', data)
+                    $(`#${item}-element-${id}`).remove()
+                },
+                error: function (data) {
+                    console.log('error', data)
+                }
+            })
+        }
+    
     $(document).ready(function () {
         $('#scheduleForm').submit(function (event) {
             event.preventDefault()
@@ -268,7 +311,7 @@
             let formData = new FormData(this)
 
             $.ajax({
-                url: "{% url 'students_search' %}",
+                url: "{% url 'students_search' subject_id=subject.id %}",
                 type: 'POST',
                 data: formData,
                 contentType: false,
@@ -283,9 +326,7 @@
                     console.log('error', data)
                 }
             })
-        })
-
-        
+        })   
     })
 
 </script>

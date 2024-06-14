@@ -7,12 +7,7 @@ from user.models import CustomUser
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.forms import modelformset_factory
-
-
-
-
-
-
+from django.http import JsonResponse
 
 @login_required
 def course(request, id):
@@ -76,18 +71,19 @@ def course(request, id):
     })
 
 @login_required
-def students_search(request):
+def students_search(request, subject_id):
     from django.http import JsonResponse
     from django.template.loader import render_to_string
 
     if request.method == 'POST':
         search_data = request.POST.get('search')
+        subject = get_object_or_404(Subject, pk=subject_id)
         if search_data:
             if '@' in search_data:
                 students = CustomUser.objects.filter(email__contains=search_data).all()
             else:
                 students = CustomUser.objects.filter(name__contains=search_data).all()
-            html = render_to_string('courses/students_search.html', {'students': students})
+            html = render_to_string('courses/students_search.html', {'students': students, 'subject': subject})
             print(students_search)
 
             return JsonResponse({'status': 'success', 'html': html})
@@ -116,26 +112,52 @@ def create_course(request):
         form = CourseForm()
     return render(request, 'courses/create_course.html', {'form': form})
 
+@login_required
+def add_student(request, subject_id, student_id):
+    from user.models import CustomUser
+    from subject.models import Subject
+    if request.method == 'POST':
+        try:
+            subject = get_object_or_404(Subject, pk=subject_id)
+            user = get_object_or_404(CustomUser, pk=student_id)
+            subject.students.add(user)
+            return JsonResponse({'status': 'success'})
+        except:
+            return JsonResponse({'status': 'failed', 'error': 'invalid request'}), 400
 
 @login_required
-def add_student(request, subject_id):
-    subject = get_object_or_404(Subject, id=subject_id)
+def delete_student(request, subject_id, student_id):
+    from user.models import CustomUser
+    from subject.models import Subject
     if request.method == 'POST':
-        form = AddStudentForm(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data['email']
-            try:
-                student = CustomUser.objects.get(email=email, is_student=True)
-                subject.students.add(student)
-                messages.success(request, 'Студента успішно додано.')
-            except CustomUser.DoesNotExist:
-                messages.error(request, 'Студента не знайдено або він не є студентом.')
-        return redirect('subject_detail', subject_id=subject.id)
-    else:
-        form = AddStudentForm()
-    return render(request, 'add_student.html', {'form': form, 'subject': subject})
+        try:
+            subject = get_object_or_404(Subject, pk=subject_id)
+            user = get_object_or_404(CustomUser, pk=student_id)
+            subject.students.remove(user)
+            return JsonResponse({'status': 'success'})
+        except:
+            return JsonResponse({'status': 'failed', 'error': 'invalid request'}), 400
+        
+@login_required
+def delete_material(request, subject_id, material_id):
+    from .models import Material
+    if request.method == 'POST':
+        try:
+            Material.objects.filter(id=material_id).first().delete()
+            return JsonResponse({'status': 'success'})
+        except:
+            return JsonResponse({'status': 'failed', 'error': 'invalid request'}), 400
 
-# --------------------------------
+@login_required
+def delete_schedule(request, subject_id, schedule_id):
+    from schedule.models import Schedule
+    if request.method == 'POST':
+        try:
+            Schedule.objects.filter(id=schedule_id).first().delete()
+            return JsonResponse({'status': 'success'})
+        except:
+            return JsonResponse({'status': 'failed', 'error': 'invalid request'}), 400
+
 @login_required
 def course_url(request):
     return redirect('homepage')

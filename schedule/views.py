@@ -16,7 +16,7 @@ def create_schedule(request, subject_id):
             schedule.subject = subject
             schedule.save()
             messages.success(request, 'Schedule created successfully!')
-            html = render_to_string('courses/schedule_template.html', {'schedule': schedule})
+            html = render_to_string('courses/schedule_template.html', {'schedule': schedule, 'user': request.user})
 
             return JsonResponse({'status': 'success', 'html': html})
     
