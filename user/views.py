@@ -49,7 +49,7 @@ def login_views(request):
             password = form.cleaned_data.get('password')
             user = authenticate(request, username=email, password=password) 
             
-            print(user, password)
+
             if user is not None:
                 auth_login(request, user)
                 messages.success(request, f'Logged in successfully, {user.name}.')
@@ -68,7 +68,7 @@ def profile(request, slug):
 
     profile = get_object_or_404(Profile, slug=slug)
     
-    subjects = get_list_or_404(Subject, students=profile.user)
+    subjects = Subject.objects.filter(students=request.user).all()
 
     teachers = []
     for subject in subjects:

@@ -7,6 +7,7 @@
     href="{% url 'create_course' %}">+</a>
 </div>
 
+{% if subject %}
 <div class="grid grid-cols-4 gap-4 mt-4">
   {% for subject in subject %}
   <div class="max-w-xs">
@@ -130,10 +131,12 @@
       </div>
     </div>
   </div>
-  {% empty %}
-    <h1 class="text-2xl text-white">You don't have any Courses</h1>
   {% endfor %}
-
 </div>
+{% else %}
+<div class="p-3 bg-blue-950 rounded-lg flex flex-row justify-center w-full mt-4">
+  <h1 class="text-2xl text-white">You don't have any Courses</h1>
+</div>
+{% endif %}
 
 {% endblock content %}

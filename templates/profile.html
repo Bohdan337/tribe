@@ -26,6 +26,9 @@
                     <div class="text-sm bg-green-400 rounded-lg p-2">{{ teacher }}</div>
                 {% endfor %}
             </div>
+            {% if not teachers %}
+                <p class="text-lg">You don't have any courses</p>
+            {% endif %}
         </div>
         <div class="bg-blue-950 p-3 rounded-lg mt-4">
             <p class="text-xl">Your courses</p>
@@ -34,6 +37,9 @@
                     <div class="text-sm bg-green-400 rounded-lg p-2">{{ subject.title }}</div>
                 {% endfor %}
             </div>
+            {% if not subjects %}
+                <p class="text-lg">You don't have any courses</p>
+            {% endif %}
         </div>
     </div>
 

@@ -6,11 +6,11 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def home(request):
-    # user = request.user
-    # subjects = Subject.objects.filter(students__in=user).distinct()
-    # print(subjects)
+    user = request.user
+    subjects = Subject.objects.filter(students=user).all()
+    print(subjects)
 
-    subjects = Subject.objects.all()
+    # subjects = Subject.objects.all()
     context = {'subject': subjects}
 
     return render(request, 'index.html', context=context)
