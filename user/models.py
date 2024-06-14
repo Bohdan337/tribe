@@ -70,7 +70,7 @@ class CustomUser(AbstractUser):
 class Profile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='profile_images', default='default_profile.jpg')
-    slug=models.SlugField(blank=True, null=True)
+    slug=models.SlugField(blank=True, null=True, unique=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
