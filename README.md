@@ -29,3 +29,16 @@
 > ```
 > python manage.py runserver
 > ```
+
+> ## Make migrations
+> ```
+> python manage.py makemigrations
+> ```
+> ```
+> python manage.py migrate
+> ```
+
+> ## Run localy again (make sure port 8000 is free to use)
+> ```
+> python manage.py runserver
+> ```
