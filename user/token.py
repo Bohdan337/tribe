@@ -1,5 +1,9 @@
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 import six
+
+
+# The class `AccountActivationTokenGenerator` generates tokens for activating user accounts based on
+# user ID, timestamp, and account activation status.
 class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
     def _make_hash_value(self, user, timestamp):
         return (

@@ -5,6 +5,8 @@ import datetime
 from django.utils.text import slugify
 
 
+# The `CustomUserManager` class in Python defines methods to create regular users and superusers with
+# specified attributes.
 class CustomUserManger(BaseUserManager):
     def create_user(self, email, password=None,  **extra_field):
         if not email :
@@ -35,6 +37,8 @@ class CustomUserManger(BaseUserManager):
         return user
     
 
+# This is a custom user model in Python with fields for student, teacher, and chief teacher roles,
+# along with username, email, name, and surname.
 class CustomUser(AbstractUser):
     is_student = models.BooleanField(default=True)
     is_teacher = models.BooleanField(default=False)
@@ -67,6 +71,8 @@ class CustomUser(AbstractUser):
         return f'{self.name} {self.surname} {self.email}'
 
 
+# This class defines a Profile model with fields for user, image, and slug, along with a save method
+# to generate a slug based on the user's email.
 class Profile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='profile_images', default='default_profile.jpg')

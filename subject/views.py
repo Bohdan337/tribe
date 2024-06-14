@@ -74,6 +74,19 @@ def course(request, id):
 
 @login_required
 def create_course(request):
+    """
+    The `create_course` function in Python checks if the user is a teacher, processes a form to create a
+    course, and displays appropriate messages.
+    
+    :param request: The `request` parameter in the `create_course` function is an object that represents
+    the HTTP request made by a user. It contains information about the request, such as the user making
+    the request, the method used (GET, POST, etc.), and any data sent with the request. In this
+    :return: The `create_course` function returns a rendered HTML template for creating a course. If the
+    user is not authorized as a teacher, a message is displayed and the user is redirected to the
+    homepage. If the request method is POST and the form is valid, a new course is created and saved
+    with the current user as the teacher. A success message is displayed, and the user is redirected to
+    the homepage
+    """
     if not request.user.is_teacher:
         messages.info(request, 'You are not authorized to create a course.')
         return redirect('homepage')
@@ -97,6 +110,23 @@ def create_course(request):
 
 @login_required
 def add_student(request, subject_id):
+    """
+    The `add_student` function adds a student to a subject based on a POST request with form data
+    containing the student's email.
+    
+    :param request: The `request` parameter in the `add_student` function is an HttpRequest object,
+    which contains metadata about the incoming request from the client, such as headers, method type
+    (GET, POST, etc.), and user session information. It is typically passed to view functions in Django
+    to process and respond to
+    :param subject_id: The `subject_id` parameter in the `add_student` function is used to identify the
+    specific subject to which a student is being added. It is passed as an argument to the function and
+    is used to retrieve the corresponding `Subject` object from the database using
+    `get_object_or_404(Subject
+    :return: The `add_student` function returns a rendered HTML template named 'add_student.html' along
+    with a form and the subject object. The form is used to add a student to a specific subject. If the
+    form is valid and the student is successfully added to the subject, a success message is displayed.
+    If the student is not found or is not a student, an error message is displayed. Finally,
+    """
     subject = get_object_or_404(Subject, id=subject_id)
     if request.method == 'POST':
         form = AddStudentForm(request.POST)
@@ -113,6 +143,17 @@ def add_student(request, subject_id):
         form = AddStudentForm()
     return render(request, 'add_student.html', {'form': form, 'subject': subject})
 
+
+
 @login_required
 def course_url(request):
+    """
+    The `course_url` function redirects the user to the homepage.
+    
+    :param request: The `request` parameter in the `course_url` function is typically an object that
+    contains information about the current HTTP request, such as the user's browser information, session
+    data, and any data sent in the request. It is commonly used in web development frameworks like
+    Django or Flask to handle and process
+    :return: A redirect to the 'homepage' URL is being returned.
+    """
     return redirect('homepage')

@@ -4,6 +4,10 @@ from django.conf.urls.static import static
 
 from . import views
 
+# This code block in a Django project is defining the URL patterns for different views in the
+# application. Each `path` function call specifies a URL pattern along with the corresponding view
+# function that should be called when that URL is accessed. Here's a breakdown of what each path is
+# doing:
 urlpatterns = [
     path('login', views.login_views, name='login'),
     path('signup', views.signup, name='signup'),

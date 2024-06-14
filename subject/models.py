@@ -4,6 +4,8 @@ from user.models import CustomUser
 # Create your models here.
 
     
+# This class defines a Subject model with fields for title, teacher, summary, grade, and students,
+# along with methods for string representation.
 class Subject(models.Model):
     title = models.CharField(max_length=200, null=True)
     teacher = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -22,6 +24,8 @@ class Subject(models.Model):
     
     
 
+# The `Material` class defines a model with fields for subject, title, description, and creation
+# timestamp.
 class Material(models.Model):
     subject = models.ForeignKey(Subject, related_name="materials", on_delete=models.CASCADE)
     title = models.CharField(max_length=250, null=False, blank=False)
@@ -29,6 +33,8 @@ class Material(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 
+# The `MaterialFile` class represents a model with fields for a material, file, and creation timestamp
+# in a Django application.
 class MaterialFile(models.Model):
     material = models.ForeignKey(Material, related_name='files', on_delete=models.CASCADE)
     file = models.FileField(upload_to='materials/%Y/%m/%d')
