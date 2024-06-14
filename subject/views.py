@@ -116,12 +116,17 @@ def create_course(request):
 def add_student(request, subject_id, student_id):
     from user.models import CustomUser
     from subject.models import Subject
+    from django.template.loader import render_to_string
+
     if request.method == 'POST':
         try:
             subject = get_object_or_404(Subject, pk=subject_id)
             user = get_object_or_404(CustomUser, pk=student_id)
             subject.students.add(user)
-            return JsonResponse({'status': 'success'})
+
+            html = render_to_string('courses/student_template.html', {'student': user})
+
+            return JsonResponse({'status': 'success', 'html': html})
         except:
             return JsonResponse({'status': 'failed', 'error': 'invalid request'}), 400
 
