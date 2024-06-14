@@ -181,7 +181,7 @@ def admin_panel(request, user_type=None):
     :return: The `admin_panel` function returns a rendered template named 'panel.html' with the context
     data containing the search form (`search_form`) and the list of users (`users`).
     """
-    if request.user.is_student:
+    if not request.user.is_teacher or not request.user.is_teacher:
         return redirect('homepage')
     
     form = UserSearchForm()
