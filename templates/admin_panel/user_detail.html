@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="bg-blue-950 rounded-lg mt-14 mx-auto" style="width: 750px">
+    <h1 class="text-2xl text-white font-bold ml-4 mt-4">Деталі користувача</h1>
+    <div class="bg-gray-900 rounded-md m-4 p-4 mb-4 text-white">
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-4 flex items-center">
+                <label for="id_email" class="mb-2 text-sm font-bold mr-14">Email:</label>
+                {{ form.email }}
+            </div>
+            <div class="mb-4 flex mt-4 items-center">
+                <label for="id_name" class="block mb-2 text-sm font-bold mr-14">Name:</label>
+                {{ form.name }}
+            </div>
+            <div class="mb-4 flex mt-4 items-center">
+                <label for="id_surname" class="block mb-2 text-sm font-bold mr-14">Surname:</label>
+                {{ form.surname }}
+            </div>
+            <div class="mb-4 flex mt-4 items-center">
+                {{ form.is_student }}
+                <label for="id_is_student" class="block mb-2 text-sm font-bold">is student</label>
+            </div>
+            <div class="mb-4 flex mt-4 items-center">
+                {{ form.is_teacher }}
+                <label for="id_is_teacher" class="block mb-2 text-sm font-bold">is teacher</label>
+            </div>
+            <button type="submit" class="bg-blue-950 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Save</button>
+            <a href="{% url 'delete_user' user.id %}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-4">Delete user</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

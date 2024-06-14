@@ -1,0 +1,46 @@
+{% for student in students %}
+<div class="rounded-lg border-gray-900 border-4 p-2 my-2" id="search-element-{{ student.id }}">
+    <div class="flex flex-row justify-between">
+        <div class="text-xl">{{ student.name }} {{ student.surname }}</div>
+        <button class="inline-flex w-8 h-8 justify-center items-center bg-green-400 hover:bg-green-300 text-pink-50 hover:text-white rounded-full transition duration-150"
+        onclick="add(`{% url 'add_student' subject_id=subject.id student_id=student.id %}`, '{{ student.id }}')">
+            +
+        </button>
+    </div>
+    <hr class="border-gray-900 border rounded-lg my-2">
+    {{ student.email }}
+</div>
+{% empty %}
+    <div class="text-xl my-2">No such students</div>
+{% endfor %}
+
+<script>
+    function add(url, id) {
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for(var i=0;i < ca.length;i++) {
+                var c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            }
+            return null;
+        }
+
+        var csrftoken = readCookie('csrftoken');
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            headers: { "X-CSRFToken": csrftoken },
+            success: function (data) {
+                console.log('success', data)
+                $(`#search-element-${id}`).remove()
+                $('#studentsList').prepend(data.html)
+            },
+            error: function (data) {
+                console.log('error', data)
+            }
+        })
+    }
+</script>

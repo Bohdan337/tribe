@@ -1,55 +1,93 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, Group, Permission
-from django.core.validators import EmailValidator
+from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.utils.text import slugify
 
 
+# The `CustomUserManager` class in Python defines methods to create regular users and superusers with
+# specified attributes.
+class CustomUserManger(BaseUserManager):
+    def create_user(self, email, password=None,  **extra_field):
+        if not email :
+            raise ValueError('User must have an email address')
 
+        user = self.model(
+            # normalize_email => if as write captel char it turn for samll char
+            email = self.normalize_email(email),
+            **extra_field,
+        )
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+    def create_superuser(self, email, password, **extra_field):
+        user = self.create_user(
+            email = self.normalize_email(email),
+            **extra_field,
+            password = password,
+            is_superuser=True,
+        )
+        
+        user.is_admin = True
+        user.is_active = True
+        user.is_staff = True
+        user.is_superadmin = True
+        
+        user.save(using=self._db)
+        return user
+    
 
+# This is a custom user model in Python with fields for student, teacher, and chief teacher roles,
+# along with username, email, name, and surname.
 class CustomUser(AbstractUser):
-    is_student = models.BooleanField(default=False)
+    is_student = models.BooleanField(default=True)
     is_teacher = models.BooleanField(default=False)
     is_chief_teacher = models.BooleanField(default=False)
 
-    groups = models.ManyToManyField(Group, verbose_name=('groups'), blank=True, related_name='customuser_set', related_query_name='user')
-    user_permissions = models.ManyToManyField(Permission, verbose_name=('user permissions'), blank=True, related_name='customuser_set', related_query_name='user')
+    
+    # groups = models.ManyToManyField(Group, verbose_name=('groups'), blank=True, related_name='customuser_set', related_query_name='user')
+    # user_permissions = models.ManyToManyField(Permission, verbose_name=('user permissions'), blank=True, related_name='customuser_set', related_query_name='user')
+    
+    username = models.CharField(max_length=50, default='user')
+    email=models.EmailField(null=False, blank=False, unique=True)
+    name=models.CharField(null=False, max_length=50)
+    surname=models.CharField(null=False, max_length=50)
+    created_at=models.DateTimeField(auto_now_add=True)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['name','surname']
+    objects = CustomUserManger()
 
 
+    def save(self, *args, **kwargs):
+        if not self.username:
+            self.username = f'{self.name} {self.surname}'
+        super().save(*args, **kwargs)
 
-class Student(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True, related_name='student')
-    name = models.CharField(max_length=100, blank=True)
-    surname = models.CharField(max_length=150, blank=True)
-    email = models.EmailField(unique=True, validators=[EmailValidator()], blank=True)
+    def  __str__(self):
+        return f'{self.name} {self.surname} {self.email}'
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    def __repr__(self):
+        return f'{self.name} {self.surname} {self.email}'
+
+
+# This class defines a Profile model with fields for user, image, and slug, along with a save method
+# to generate a slug based on the user's email.
+class Profile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='profile_images', default='default_profile.jpg')
+    slug=models.SlugField(blank=True, null=True, unique=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.user.email.split('@')[0])
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.name} {self.surname} ({self.email})"
+        return f"{self.slug} {self.user.name}"
+
+
+
+
     
 
 
-
-class Teacher(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True, related_name='teacher')
-    name = models.CharField(max_length=100, blank=True)
-    surname = models.CharField(max_length=150, blank=True)
-    email = models.EmailField(unique=True, validators=[EmailValidator()], blank=True)
-
-    achievements = models.TextField(blank=True, null=True)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.name} {self.surname} ({self.email})"
-
-class ChiefTeacher(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True, related_name='chiefteacher')
-    name = models.CharField(max_length=100, blank=True)
-    surname = models.CharField(max_length=150, blank=True)
-    email = models.EmailField(unique=True, validators=[EmailValidator()], blank=True)
-    created_at = models.DateTimeField(auto_now_add=True, null=True)
-
-    teachers = models.ManyToManyField(Teacher, blank=True)
-    
-    def __str__(self):
-        return f"{self.name} {self.surname} ({self.email})"

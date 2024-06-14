@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="mt-14 w-full text-white flex flex-row">
+    <div class="w-96">
+        <div class="bg-blue-950 p-3 rounded-lg">
+            <div class="flex flex-row content-center">
+                <img class="rounded-full" src="{{ profile.image.url }}" width="50" alt="avatar">
+                <p class="text-xl ml-2">{{ profile.user.name }} {{ profile.user.surname }}</p>
+            </div>
+            <div class="mt-4">
+                <form method="POST" enctype="multipart/form-data" id="modelConfirm" class="hidden">
+                    {% csrf_token %}
+                    {{ form.image }}
+                    <button type="submit" value="Submit" class="text-white bg-green-400 hover:bg-green-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center">Change Image</button>
+                </form>
+                <button type="submit" value="Submit" class="text-white bg-green-400 hover:bg-green-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center" id="formButton" onclick="openModal('modelConfirm')">Change Image</button>
+                <p class="text-sm mt-4">{{ profile.user.created_at }}</p>
+            </div>
+        </div>
+        <div class="bg-blue-950 p-3 rounded-lg mt-4">
+            <p class="text-xl">Your teachers</p>
+            <div class="my-2 grid grid-cols-4 gap-2">
+                {% for teacher in teachers %}
+                    <div class="text-sm bg-green-400 rounded-lg p-2">{{ teacher }}</div>
+                {% endfor %}
+            </div>
+            {% if not teachers %}
+                <p class="text-lg">You don't have any courses</p>
+            {% endif %}
+        </div>
+        <div class="bg-blue-950 p-3 rounded-lg mt-4">
+            <p class="text-xl">Your courses</p>
+            <div class="my-2 grid grid-cols-3 gap-2">
+                {% for subject in subjects %}
+                    <div class="text-sm bg-green-400 rounded-lg p-2">{{ subject.title }}</div>
+                {% endfor %}
+            </div>
+            {% if not subjects %}
+                <p class="text-lg">You don't have any courses</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="w-full ml-4">
+        <div class="rounded-lg bg-blue-950 p-3">
+            <p class="text-xl">About</p>
+            <p class="text-sm mt-4">Email: {{ profile.user.email }}</p>
+            <div class="mt-4"><a href="{% url 'logout' %}" class="mt-6 text-red-600">Logout</a></div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    window.openModal = function (modalId) {
+        document.getElementById(modalId).style.display = 'block'
+        document.getElementById(modalId).classList.remove('hidden')
+        document.getElementById('formButton').classList.add('hidden')
+    }
+
+    window.closeModal = function (modalId) {
+        document.getElementById(modalId).style.display = 'none'
+        document.getElementById('formButton').classList.remove('hidden')
+    }
+</script>
+
+{% endblock content %}

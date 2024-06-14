@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,6 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-ak!l_tdg(#9=ev7rlm7e8vf4+q*lf8v9b95#g9v9lu@0arsmcc'
 
+# uojz fgyi caha ixxp
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -40,10 +42,18 @@ INSTALLED_APPS = [
 
     'core',
     'user',
+    'subject',
+    'schedule',
 
+    'tinymce',
     'crispy_forms',
     'crispy_tailwind',
+    'captcha',
+    'django_recaptcha',
 ]
+
+RECAPTCHA_PUBLIC_KEY = '6LdLBGspAAAAAJDjh19p07Hu4pS1W_YQNEWLjTcC'
+RECAPTCHA_PRIVATE_KEY = '6LdLBGspAAAAAKon7wR_d1g3QdLw3IdjUNFw4SB5'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 
@@ -128,7 +138,42 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / "static/"]
 
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(STATIC_URL, 'media')
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'pasternakmary08@gmail.com'
+EMAIL_HOST_PASSWORD = 'xrdr ndqw qsra vhne'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'pasternakmary08@gmail.com'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'user.CustomUser'
+
+
+TINYMCE_DEFAULT_CONFIG = {
+    'height': 250,
+    'width': 540,
+    'selector': 'textarea',
+    'toolbar': '''
+        fullscreen preview bold italic underline | fontselect,
+        fontsizeselect  | forecolor backcolor | alignleft alignright |
+        aligncenter alignjustify | indent outdent | bullist numlist table 
+    ''',
+    'content_style': "/static/src/tinymce/content.css",
+    'content_css': '/static/src/tinymce/content.css', 
+    'menubar': False,
+    'statusbar': False,
+    
+}
+
+LOGIN_URL = '/login'
