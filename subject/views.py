@@ -164,5 +164,9 @@ def delete_schedule(request, subject_id, schedule_id):
             return JsonResponse({'status': 'failed', 'error': 'invalid request'}), 400
 
 @login_required
-def course_url(request):
-    return redirect('homepage')
+def course_url(request, subject_id):
+    from .models import Subject
+    subject = Subject.objects.filter(id=subject_id).first()
+    subject.students.add(request.user)
+    print(subject_id)
+    return redirect('course', id=subject_id)

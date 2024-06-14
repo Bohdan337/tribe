@@ -7,11 +7,12 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def home(request):
     user = request.user
-    subjects = Subject.objects.filter(students=user).all()
-    print(subjects)
+    subjectsStudent = Subject.objects.filter(students=user).all()
+    subjectTeacher = Subject.objects.filter(teacher=user).all()
 
     # subjects = Subject.objects.all()
-    context = {'subject': subjects}
+    context = {'subject': subjectsStudent,
+               'subject': subjectTeacher}
 
     return render(request, 'index.html', context=context)
 
