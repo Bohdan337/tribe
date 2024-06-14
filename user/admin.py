@@ -8,6 +8,10 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import CustomUser
 from .models import Profile
 
+# The class `UserAdmin` defines fieldsets for adding and displaying user information in an admin
+# interface.
+
+
 class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {

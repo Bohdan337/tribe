@@ -23,6 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-ak!l_tdg(#9=ev7rlm7e8vf4+q*lf8v9b95#g9v9lu@0arsmcc'
 
+# uojz fgyi caha ixxp
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -141,6 +142,15 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(STATIC_URL, 'media')
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'pasternakmary08@gmail.com'
+EMAIL_HOST_PASSWORD = 'xrdr ndqw qsra vhne'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'pasternakmary08@gmail.com'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

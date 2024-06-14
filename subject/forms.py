@@ -6,17 +6,20 @@ from tinymce.widgets import TinyMCE
 
 
 
+# The `CourseForm` class is a form in Django that allows users to input a title and summary for a
+# subject.
 class CourseForm(forms.ModelForm, forms.Form):
     title = forms.CharField(max_length=255, widget=Input(attrs={'class': 'm-3 h-12 rounded-lg p-2 bg-gray-900 text-white', 'placeholder': 'Title'}))
     summary = forms.CharField(max_length=1024, widget=Input(attrs={'class': 'm-3 h-12 rounded-lg p-2 bg-gray-900 text-white', 'placeholder': 'Description'}))
-    students = forms.ModelMultipleChoiceField(queryset=CustomUser.objects.filter(is_student=True, is_superuser=False), widget=forms.CheckboxSelectMultiple())
 
     class Meta:
         model = Subject
-        fields = ['title', 'summary', 'students']
+        fields = ['title', 'summary']
 
 
 
+# The `AddStudentForm` class is a Django form used to add multiple students to a subject with
+# checkboxes for selection.
 class AddStudentForm(forms.Form):
     students = forms.ModelMultipleChoiceField(queryset=CustomUser.objects.filter(is_student=True, is_superuser=False), widget=forms.CheckboxSelectMultiple())
 
@@ -26,10 +29,12 @@ class AddStudentForm(forms.Form):
 
 
 
+# The class `MultipleFileInput` allows for multiple files to be selected in a form input field.
 class MultipleFileInput(forms.ClearableFileInput):
     allow_multiple_selected = True
 
 
+# This class extends the ClearableFileInput class to handle multiple file inputs.
 class MultipleFileField(forms.FileField):
     def __init__(self, *args, **kwargs):
         kwargs.setdefault("widget", MultipleFileInput())
@@ -46,6 +51,7 @@ class MultipleFileField(forms.FileField):
 
 
 
+# The `MaterialForm` class allows users to input a title and description for a material, using TinyMCE for rich text editing.
 class MaterialForm(forms.ModelForm):
     title = forms.CharField(max_length=255, widget=Input(attrs={'class': 'h-12 rounded-lg p-2 bg-gray-900 text-white w-96', 'placeholder': 'Title'}))
     description = forms.CharField(widget=TinyMCE(attrs={
@@ -57,15 +63,13 @@ class MaterialForm(forms.ModelForm):
         model = Material
         fields = ['title', 'description']
 
-
+# The `MaterialFileForm` class allows users to upload multiple files related to a material.
 class MaterialFileForm(forms.ModelForm):
     file = MultipleFileField()
 
     class Meta:
         model = MaterialFile
         fields = ['file']
-        # widgets = {'file' : forms.ClearableFileInput(attrs={'allow_multiple_selected': True})}
-
 
 
 
