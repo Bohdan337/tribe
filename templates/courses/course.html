@@ -164,6 +164,8 @@
                             <hr class="border-gray-900 border rounded-lg my-2">
                             {{ material.created_at }}
                         </div>
+                    {% empty %}
+                        <div class="text-xl my-2">This course is empty</div>
                     {% endfor %}
                 </div>
             </div>

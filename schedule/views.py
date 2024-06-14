@@ -5,8 +5,9 @@ from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404
 from subject.models import Subject
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def create_schedule(request, subject_id):
     subject = get_object_or_404(Subject, pk=subject_id)
     if request.method == 'POST':
@@ -16,7 +17,7 @@ def create_schedule(request, subject_id):
             schedule.subject = subject
             schedule.save()
             messages.success(request, 'Schedule created successfully!')
-            html = render_to_string('courses/schedule_template.html', {'schedule': schedule, 'user': request.user})
+            html = render_to_string('courses/schedule_template.html', {'schedule': schedule, 'subject': subject})
 
             return JsonResponse({'status': 'success', 'html': html})
     

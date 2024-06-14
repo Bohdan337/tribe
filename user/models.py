@@ -1,7 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, Group, Permission, BaseUserManager
-from django.core.validators import EmailValidator
-import datetime
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils.text import slugify
 
 

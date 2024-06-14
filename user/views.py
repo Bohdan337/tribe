@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.shortcuts import get_object_or_404, get_list_or_404
+from django.contrib.auth.decorators import login_required
 
 
 
@@ -59,7 +60,7 @@ def login_views(request):
     return render(request, 'registration/login.html', {'form': form})
 
 
-
+@login_required
 def profile(request, slug):
     from .models import Profile
     from .forms import ChangeImageForm
