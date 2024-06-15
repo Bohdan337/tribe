@@ -60,8 +60,6 @@ def signup(request):
 
             profile = Profile(user=user)
             profile.save()
-
-            print(profile)
             
             email = create_email(
                 request,

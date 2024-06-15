@@ -84,7 +84,6 @@ def students_search(request, subject_id):
             else:
                 students = CustomUser.objects.filter(name__contains=search_data).all()
             html = render_to_string('courses/students_search.html', {'students': students, 'subject': subject})
-            print(students_search)
 
             return JsonResponse({'status': 'success', 'html': html})
     
@@ -117,7 +116,6 @@ def create_course(request):
             
             course.save()
             form.save_m2m()
-            print(course)
 
             messages.success(request, 'Course created successfully.')
             return redirect('/')
@@ -190,5 +188,4 @@ def course_url(request, subject_id):
     from .models import Subject
     subject = Subject.objects.filter(id=subject_id).first()
     subject.students.add(request.user)
-    print(subject_id)
     return redirect('course', id=subject_id)

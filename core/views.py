@@ -20,6 +20,6 @@ def home(request):
 
     # Render the 'index.html' template with the subjects data.
     context = {'subject': subjectsStudent,
-               'subject': subjectTeacher}
+               'subjectT': subjectTeacher}
 
     return render(request, 'index.html', context=context)
