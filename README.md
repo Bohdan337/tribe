@@ -37,19 +37,6 @@
 > npx tailwindcss init
 > ```
 
-<!-- > ## Add HTML source files to tailwind.config.js
-> ```
-> module.exports = {
->  content: [
->      './templates/**/*.html' //here
->  ],
->  theme: {
->    extend: {},
->  },
->  plugins: [],
-> }
-> ``` -->
-
 > ## Run localy (make sure port 8000 is free to use)
 > ```
 > python manage.py runserver
