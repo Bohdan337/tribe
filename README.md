@@ -2,6 +2,7 @@
 > ## Requirements
 > ### 1. Install [Python](https://www.python.org/downloads/)
 > ### 2. Install [git](https://git-scm.com/downloads)
+> ### 2. Install [Node.js](https://nodejs.org/en/download/package-manager/current)
 
 > ## Get template code
 > ```
@@ -20,10 +21,34 @@
 > pip install -r requirements.txt
 > ```
 
-> ## Create superuser
+> ## Superuser credentials
 > ```
-> python manage.py createsuperuser --username=<admin> --email=<admin@example.com>
+> admin@gmail.com
 > ```
+> ```
+> Aadmin
+> ```
+
+> ## Install Tailwind CSS
+> ```
+> npm install -D tailwindcss
+> ```
+> ```
+> npx tailwindcss init
+> ```
+
+<!-- > ## Add HTML source files to tailwind.config.js
+> ```
+> module.exports = {
+>  content: [
+>      './templates/**/*.html' //here
+>  ],
+>  theme: {
+>    extend: {},
+>  },
+>  plugins: [],
+> }
+> ``` -->
 
 > ## Run localy (make sure port 8000 is free to use)
 > ```
