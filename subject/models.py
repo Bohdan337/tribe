@@ -40,6 +40,14 @@ class MaterialFile(models.Model):
     material = models.ForeignKey(Material, related_name='files', on_delete=models.CASCADE)
     file = models.FileField(upload_to='materials/%Y/%m/%d')
     created_at = models.DateTimeField(auto_now_add=True)
+    
 
-    
-    
+
+class Grade(models.Model):
+    student = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='grades')
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='grades')
+    grade = models.DecimalField(max_digits=5, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Grade {self.grade} for {self.student.name} in {self.subject.title}'

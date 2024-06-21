@@ -21,6 +21,41 @@
         display: none;
         transition: all 0.5s ease;
     }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    th, td {
+        padding: 12px;
+        text-align: left;
+    }
+    
+    th {
+        background-color: #4A5568; /* Темно-сірий фон для заголовків */
+        color: white;
+    }
+    
+    td {
+        border: 1px solid #4A5568; /* Границя для кожної клітинки */
+    }
+    
+    /* Ефект "зебри" для рядків */
+    tbody tr:nth-child(odd) {
+        background-color: #2D3748; /* Темний фон для непарних рядків */
+    }
+    
+    tbody tr:nth-child(even) {
+        background-color: #1A202C; /* Трохи світліший фон для парних рядків */
+    }
+    
+    tbody tr:hover {
+        background-color: #4A5568; /* Колір фону при наведенні на рядок */
+        color: white;
+    }
+        
+
 </style>
 
 
@@ -130,6 +165,9 @@
                     <button class="bg-gray-900 text-white p-2 ml-2 rounded-lg hover:bg-blue-900" onclick="students()">
                         Students
                     </button>
+                    <button class="bg-gray-900 text-white p-2 ml-2 rounded-lg hover:bg-blue-900" onclick="notes()">
+                        Notes
+                    </button>
                 </div>
                 <button
                     class="inline-flex w-8 h-8 justify-center items-center bg-green-400 hover:bg-green-300 text-pink-50 hover:text-white rounded-full transition duration-150"
@@ -222,6 +260,52 @@
 
                 </div>
             </div>
+
+             <!-- NOTES -->
+             <div class="bg-blue-950 rounded-lg mx-auto hidden" id="notesTab">
+                <h1 class="text-2xl text-white font-bold ml-4 mt-4">Select a student to grade</h1>
+                {% if subject.students %}
+                {% for student in subject.students.all %}
+                <div class="overflow-x-auto bg-gray-900 rounded-md m-4">
+                    <table class="min-w-full bg-gray-900 text-white">
+                        <thead>
+                            <tr>
+                                <th class="px-4 py-2">Email</th>
+                                <th class="px-4 py-2">Grade</th>
+                                {% if user.is_teacher %}
+                                    <th class="px-4 py-2">Give a grade</th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-t border-gray-700">
+                                <td class="px-4 py-2">{{ student.email }}</td>
+                                <td class="px-4 py-2">
+                                    <div id="gradeList_{{ student.id }}">
+                                        {% for grade in student_grades %}
+                                            {% if grade.student.id == student.id %}
+                                                <p>{{ grade.grade }} ({{ grade.created_at }})</p>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                                {% if user.is_teacher %}
+                                    <td class="px-4 py-2">
+                                        <input type="text" class="m-3 h-12 rounded-lg p-2 bg-gray-900 text-white"
+                                        id="gradeInput_{{ student.id }}" min="1" max="12" required>
+                                        <button onclick="saveGrade('{{ student.id }}', '{{ subject.id }}')" class="text-white font-boldrounded">Submit</button>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                {% endfor %}
+                {% else %}
+                    <div class="text-xl my-2">Notes is empty</div>
+                {% endif %}
+            </div>
+
             <!-- MATERIAL FORM -->
             <div class="my-2 hidden" id="materialForm">
                 <div class="bg-blue-950 mt-14 rounded-lg w-max">
@@ -269,11 +353,21 @@
         $('#tasksTab').removeClass('hidden')
         $('#studentsTab').addClass('hidden')
         $('#materialForm').addClass('hidden')
+        $('#notesTab').addClass('hidden')
+    }
+
+    
+    function notes() {
+        $('#notesTab').removeClass('hidden')
+        $('#tasksTab').addClass('hidden')
+        $('#studentsTab').addClass('hidden')
+        $('#materialForm').addClass('hidden')
     }
 
     function students() {
         $('#studentsTab').removeClass('hidden')
         $('#tasksTab').addClass('hidden')
+        $('#notesTab').addClass('hidden')
         $('#materialForm').addClass('hidden')
         $('#studentsList').removeClass('hidden')
         $('#studentsSearchList').addClass('hidden')
@@ -315,6 +409,44 @@
         document.execCommand('copy');
         tempTextarea.remove();
     }
+
+    function saveGrade(studentId, subjectId) {
+        var gradeInput = $('#gradeInput_' + studentId);
+        var grade = gradeInput.val();
+
+        if (grade === '' || isNaN(grade) || grade < 1 || grade > 12 || parseInt(grade) !== parseFloat(grade)) {
+            alert('Please enter an integer from 1 to 12.');
+            return;
+        }
+        
+        var currentDate = new Date().toISOString();
+    
+        var data = {
+            'student_id': studentId,
+            'subject_id': subjectId,
+            'grade': grade,
+            'created_at': currentDate,
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+        };
+    
+        $.ajax({
+            url: "{% url 'save_grade' %}",
+            method: 'POST',
+            data: data,
+            success: function (response) {
+                console.log(data)
+                gradeInput.val('');
+                console.log('The grade was successfully saved');
+
+                var newGradeHtml = `<p>${grade} (${currentDate})</p>`;
+                $('#gradeList_' + studentId).append(newGradeHtml);
+            },
+            error: function (error) {
+                console.log(data)
+                console.error('An error occurred while saving the grade', error);
+            }
+        });
+    };
 
     $(document).ready(function () {
         $('#scheduleForm').submit(function (event) {
