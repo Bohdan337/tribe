@@ -39,3 +39,16 @@ def create_schedule(request, subject_id):
     return JsonResponse({'status': 'failed', 'error': 'invalid request'}), 400
 
 
+@login_required
+def schedule(request):
+    from .models import Schedule
+    import calendar
+
+    calendar = calendar.Calendar()
+    c = calendar.monthdayscalendar(year=2024, month=6)
+    print(c)
+
+    schedule = Schedule.objects.filter(datetime__year=2024, datetime__month=6).all()
+    # print(schedule)
+
+    return render(request, 'schedule/schedule.html', context={'schedule': schedule, 'calendar': c})
