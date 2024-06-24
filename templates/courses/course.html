@@ -56,6 +56,33 @@
     }
         
 
+    .messages {
+        position: fixed;
+        bottom:  35px;
+        left: 35px;
+        z-index: 1000;
+    }
+    
+    .message {
+        padding: 10px;
+        margin-bottom: 5px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+    
+    .message.success {
+        color: #155724;
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+    }
+    
+    .message.error {
+        color: #721c24;
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+    }
+    
+
 </style>
 
 
@@ -280,7 +307,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="border-t border-gray-700">
+                            <tr class="border-t border-gray-700 max-h-10">
                                 <td class="px-4 py-2">{{ student.email }}</td>
                                 <td class="px-4 py-2">
                                     <div id="gradeList_{{ student.id }}">
@@ -292,10 +319,12 @@
                                     </div>
                                 </td>
                                 {% if user.is_teacher %}
-                                    <td class="px-4 py-2">
-                                        <input type="text" class="m-3 h-12 rounded-lg p-2 bg-gray-900 text-white"
+                                    <td class="flex">
+                                        <input type="number" class="m-3 h-12 rounded-lg p-2 bg-gray-900 text-white"
                                         id="gradeInput_{{ student.id }}" min="1" max="12" required>
-                                        <button onclick="saveGrade('{{ student.id }}', '{{ subject.id }}')" class="text-white font-boldrounded">Submit</button>
+                                        <button onclick="saveGrade('{{ student.id }}', '{{ subject.id }}')" class="text-white font-boldrounded">
+                                            <svg stroke="currentColor" fill="white" stroke-width="0" viewBox="0 0 16 16" height="2em" width="2em" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16 8.5l-6 6-3-3L8.5 10l1.5 1.5L14.5 7 16 8.5zM5.7 12.2l.8.8H2c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1h7c.55 0 1 .45 1 1v6.5l-.8-.8c-.39-.39-1.03-.39-1.42 0L5.7 10.8a.996.996 0 0 0 0 1.41v-.01zM4 4h5V3H4v1zm0 2h5V5H4v1zm0 2h3V7H4v1zM3 9H2v1h1V9zm0-2H2v1h1V7zm0-2H2v1h1V5zm0-2H2v1h1V3z"></path></svg>
+                                        </button>
                                     </td>
                                 {% endif %}
                             </tr>
@@ -339,6 +368,8 @@
         </div>
     </div>
 </div>
+
+<div id="messages" class="messages"></div>
 
 <script type="text/javascript">
     function openScheduleForm(modalId) {
@@ -412,12 +443,26 @@
         tempTextarea.remove();
     }
 
+
+    function showMessage(message, type) {
+        var messagesDiv = $('#messages');
+        var messageHtml = `<div class="message ${type}">${message}</div>`;
+        messagesDiv.append(messageHtml);
+        
+        setTimeout(function() {
+            messagesDiv.find('.message').first().fadeOut(function() {
+                $(this).remove();
+            });
+        }, 5000);
+    }
+
+
     function saveGrade(studentId, subjectId) {
         var gradeInput = $('#gradeInput_' + studentId);
         var grade = gradeInput.val();
 
         if (grade === '' || isNaN(grade) || grade < 1 || grade > 12 || parseInt(grade) !== parseFloat(grade)) {
-            alert('Please enter an integer from 1 to 12.');
+            showMessage('Incorrect score. Enter an integer between 1 and 12.', 'error');
             return;
         }
         
@@ -439,6 +484,7 @@
                 console.log(data)
                 gradeInput.val('');
                 console.log('The grade was successfully saved');
+                showMessage(response.message, 'success');
 
                 var newGradeHtml = `<p>${grade} (${currentDate})</p>`;
                 $('#gradeList_' + studentId).append(newGradeHtml);

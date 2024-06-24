@@ -213,6 +213,7 @@ def save_grade(request):
 
             grade = Grade(student=student, subject=subject, grade=grade_value, created_at=created_at)
             grade.save()
+
             print(grade)
 
             return JsonResponse({'message': 'Grade successfully saved'}, status=200)
