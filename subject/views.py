@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from .forms import CourseForm, AddStudentForm, MaterialForm, MaterialFileForm
 from .models import Subject, Material, MaterialFile
+from .models import CustomUser, Grade, Subject
 from user.models import CustomUser
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
@@ -61,6 +62,9 @@ def course(request, id):
     schedules = Schedule.objects.filter(subject=subject).all()
     form = ScheduleForm()
 
+    students = subject.students.all()
+    student_grades = Grade.objects.filter(subject=subject).order_by('-created_at')
+
     return render(request, 'courses/course.html', {
         'material_form': material_form,
         'file_formset': file_formset,
@@ -68,6 +72,7 @@ def course(request, id):
         'materials': materials,
         'schedules': schedules,
         'form': form,
+        'student_grades': student_grades,
     })
 
 @login_required
@@ -189,3 +194,29 @@ def course_url(request, subject_id):
     subject = Subject.objects.filter(id=subject_id).first()
     subject.students.add(request.user)
     return redirect('course', id=subject_id)
+
+
+ 
+def save_grade(request):
+    if request.method == 'POST':
+        try:
+            student_id = request.POST.get('student_id')
+            subject_id = request.POST.get('subject_id')
+            grade_value = request.POST.get('grade')
+            created_at = request.POST.get('created_at')
+
+            print(student_id, subject_id, grade_value, created_at)
+
+            student = CustomUser.objects.get(id=student_id)
+            subject = Subject.objects.get(id=subject_id)
+
+
+            grade = Grade(student=student, subject=subject, grade=grade_value, created_at=created_at)
+            grade.save()
+            print(grade)
+
+            return JsonResponse({'message': 'Grade successfully saved'}, status=200)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'error': 'Method not allowed'}, status=405)
+
