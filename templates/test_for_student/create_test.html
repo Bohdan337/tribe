@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+
+{% load static %}
+{% block content %}
+<div class="" style="margin-top: 200px; background-color: aqua;">
+    <h1>Create Test and Question</h1>
+
+    <!-- Форма створення тесту -->
+    <h2>Create Test</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ test_form.as_p }}
+        <button type="submit">Create Test</button>
+    </form>
+
+    <!-- Форма створення питання з варіантами відповідей -->
+    <h2>Create Question with Answers</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ question_form.as_p }}
+
+        <!-- Поля для варіантів відповідей -->
+        {% for form in answer_forms %}
+            {{ form.as_p }}
+        {% endfor %}
+
+        <button type="submit">Create Question</button>
+    </form>
+</div>
+
+{% endblock %}

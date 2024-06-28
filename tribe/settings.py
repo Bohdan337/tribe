@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'user',
     'subject',
     'schedule',
+    'units_test',
 
     'tinymce',
     'crispy_forms',
