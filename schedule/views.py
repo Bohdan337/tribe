@@ -21,6 +21,7 @@ def create_schedule(request, subject_id):
     
     if request.method == 'POST':
         form = ScheduleForm(request.POST)
+        print(form)
         if form.is_valid():
             # Create a schedule object without saving it to the database yet.
             schedule = form.save(commit=False)
@@ -32,11 +33,14 @@ def create_schedule(request, subject_id):
             schedule.save()
             # Render the schedule template with the newly created schedule.
             html = render_to_string('courses/schedule_template.html', {'schedule': schedule, 'subject': subject})
-            
             return JsonResponse({'status': 'success', 'html': html})
+        
+        else:
+            errors = form.errors.as_json()
+            return JsonResponse({'status': 'failed', 'errors': errors}, status=400)
     
     # Return a JSON response indicating failure if the request is not valid.
-    return JsonResponse({'status': 'failed', 'error': 'invalid request'}), 400
+    return JsonResponse({'status': 'failed', 'error': 'invalid request'}, status=400) 
 
 
 @login_required
@@ -49,6 +53,11 @@ def schedule(request):
     print(c)
 
     schedule = Schedule.objects.filter(datetime__year=2024, datetime__month=6).all()
-    # print(schedule)
+    scheduleList = []
 
-    return render(request, 'schedule/schedule.html', context={'schedule': schedule, 'calendar': c})
+    for week in c:
+        for day in week:
+            schedule = Schedule.objects.filter(datetime__year=2024, datetime__month=6, datetime__day=day).all()
+            scheduleList.append({'day': day, 'schedules': schedule})
+
+    return render(request, 'schedule/schedule.html', context={'schedule': schedule, 'calendar': c, 'scheduleList': scheduleList})
