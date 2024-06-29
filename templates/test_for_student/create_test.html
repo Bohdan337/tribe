@@ -22,17 +22,17 @@
             {{ test_form.subject }}
             <div class="">
                 <a href="/" class = "hover:bg-gray-900 text-white font-bold py-2 px-3 rounded mx-4 mt-4" type="button">Cancel</a>
-                <button type="submit" class="bg-gray-900 hover:bg-green-400 text-white font-bold py-2 px-3 rounded mx-4 mt-4">Create Test</button>
+                <button type="submit" class="bg-gray-900 hover:bg-green-400 text-white font-bold py-2 px-3 rounded  mt-4">Create Test</button>
             </div>
         </form>
     
-        <!-- Форма створення питання з варіантами відповідей
+        <!-- 
         <h2>Create Question with Answers</h2>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ question_form.as_p }}
     
-             Поля для варіантів відповідей 
+             
             {% for form in answer_forms %}
                 {{ form.as_p }}
             {% endfor %}

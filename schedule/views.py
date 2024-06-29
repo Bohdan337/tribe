@@ -47,17 +47,23 @@ def create_schedule(request, subject_id):
 def schedule(request):
     from .models import Schedule
     import calendar
+    import datetime
+
+    date = datetime.date.today()
+    print(date)
+
+    title = datetime.datetime.now().strftime('%Y %B')
+    print(title, type(title))
 
     calendar = calendar.Calendar()
-    c = calendar.monthdayscalendar(year=2024, month=6)
+    c = calendar.monthdayscalendar(year=date.year, month=date.month)
     print(c)
 
-    schedule = Schedule.objects.filter(datetime__year=2024, datetime__month=6).all()
     scheduleList = []
 
     for week in c:
         for day in week:
-            schedule = Schedule.objects.filter(datetime__year=2024, datetime__month=6, datetime__day=day).all()
+            schedule = Schedule.objects.filter(datetime__year=date.year, datetime__month=date.month, datetime__day=day).all()
             scheduleList.append({'day': day, 'schedules': schedule})
 
-    return render(request, 'schedule/schedule.html', context={'schedule': schedule, 'calendar': c, 'scheduleList': scheduleList})
+    return render(request, 'schedule/schedule.html', context={'calendar': c, 'scheduleList': scheduleList, 'title' : title})

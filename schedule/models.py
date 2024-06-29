@@ -11,7 +11,7 @@ class Schedule(models.Model):
     The `Schedule` model represents a schedule for a subject. It contains details such as the title,
     description, associated subject, date and time, duration, and a URL link.
     """
-    title = models.CharField(max_length=255, null=False, default='title')
+    # title = models.CharField(max_length=255, null=False, default='title')
     description = models.CharField(max_length=512, blank=True, null=True)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     datetime = models.DateField(null=False, blank=False, default=timezone.now)
