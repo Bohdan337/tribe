@@ -1,32 +1,46 @@
-{% extends "base.html" %}
-
-
 {% load static %}
-{% block content %}
-<div class="" style="margin-top: 200px; background-color: aqua;">
-    <h1>Create Test and Question</h1>
+{% load tailwind_filters %}
 
-    <!-- Форма створення тесту -->
-    <h2>Create Test</h2>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ test_form.as_p }}
-        <button type="submit">Create Test</button>
-    </form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'src/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'src/input_field.css' %}">
+    <title>Create Test</title>
+</head>
 
-    <!-- Форма створення питання з варіантами відповідей -->
-    <h2>Create Question with Answers</h2>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ question_form.as_p }}
+<body class="bg-gray-900 flex justify-center items-center h-screen">
+    <div class="text-white p-4 bg-blue-950 rounded-lg w-max">
+        <h1 class="font-bold text-3xl mb-3 ml-3">Create Test</h1>
+    
+        <p class="text-lg ml-3">To start adding tasks, fill in the test information. You can edit it later.</p>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ test_form.name }}
+            {{ test_form.subject }}
+            <div class="">
+                <a href="/" class = "hover:bg-gray-900 text-white font-bold py-2 px-3 rounded mx-4 mt-4" type="button">Cancel</a>
+                <button type="submit" class="bg-gray-900 hover:bg-green-400 text-white font-bold py-2 px-3 rounded mx-4 mt-4">Create Test</button>
+            </div>
+        </form>
+    
+        <!-- Форма створення питання з варіантами відповідей
+        <h2>Create Question with Answers</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ question_form.as_p }}
+    
+             Поля для варіантів відповідей 
+            {% for form in answer_forms %}
+                {{ form.as_p }}
+            {% endfor %}
+    
+            <button type="submit">Create Question</button>
+        </form> -->
+    </div>
+</body>
+</html>
 
-        <!-- Поля для варіантів відповідей -->
-        {% for form in answer_forms %}
-            {{ form.as_p }}
-        {% endfor %}
 
-        <button type="submit">Create Question</button>
-    </form>
-</div>
-
-{% endblock %}

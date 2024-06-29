@@ -5,7 +5,7 @@ from subject.models import Subject
 
 class Test(models.Model):
     name = models.CharField(max_length=255)
-    subject = models.CharField(Subject, max_length=255)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, max_length=255)
     teacher = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='tests')
 
     def __str__(self):
