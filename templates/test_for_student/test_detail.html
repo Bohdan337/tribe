@@ -6,6 +6,11 @@
     <title>Test detail</title>
 </head>
 <body>
-    {{ test.name }}
+    <h1>{{ test.name }}</h1>
+    <ul>
+        {% for question in questions %}
+            <li>{{ question.text }}</li>
+        {% endfor %}
+    </ul>
 </body>
-</html>
+</html>  

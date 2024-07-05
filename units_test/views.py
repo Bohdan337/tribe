@@ -10,20 +10,20 @@ def create_test(request):
         form = TestForm(request.POST)
         if form.is_valid():
             form_data = form.cleaned_data
-            form_data['subject'] = form_data['subject'].id  # Зберігаємо лише ID предмета
+            form_data['subject'] = form_data['subject'].id  
 
-            # Отримуємо або ініціалізуємо лічильник ID тестів в сесії
+           
             if 'test_counter' not in request.session:
                 request.session['test_counter'] = 0
 
-            # Інкрементуємо лічильник і використовуємо його як ID тесту
+           
             request.session['test_counter'] += 1
             test_id = request.session['test_counter']
 
             form_data['id'] = test_id
-            request.session[f'test_{test_id}'] = form_data  # Зберігаємо дані форми в сесії
+            request.session[f'test_{test_id}'] = form_data 
 
-            return redirect('test_build', test_id=test_id)  # Перенаправляємо на сторінку побудови тесту з ID тесту
+            return redirect('test_build', test_id=test_id)  
     else:
         form = TestForm()
 
@@ -51,7 +51,7 @@ def test_build(request, test_id):
 def add_question(request, test_id):
     if request.method == 'POST':
         question_form = QuestionForm(request.POST)
-        answer_forms = [AnswerForm(request.POST, prefix=str(i)) for i in range(3)]  # Приклад для трьох відповідей
+        answer_forms = [AnswerForm(request.POST, prefix=str(i)) for i in range(3)]  
 
         if question_form.is_valid() and all([af.is_valid() for af in answer_forms]):
             question_data = question_form.cleaned_data
@@ -85,7 +85,7 @@ def publish_test(request, test_id):
 
             for question_data in questions:
                 question = Question(
-                    test=test,  # Assign the test instance to the test field
+                    test=test,  
                     question_type=question_data['question_type'],
                     points=question_data['points'],
                     text=question_data['text']
@@ -97,11 +97,10 @@ def publish_test(request, test_id):
                         question=question,
                         is_correct=answer_data['is_correct'],
                         text=answer_data['text'],
-                        image=answer_data.get('image', None)  # image може бути відсутнім
+                        image=answer_data.get('image', None)  
                     )
                     answer.save()
 
-            # Очистимо сесію після збереження
             del request.session[f'test_{test_id}']
             del request.session[f'questions_{test_id}']
 
@@ -112,4 +111,6 @@ def publish_test(request, test_id):
 
 def test_detail(request, test_id):
     test = get_object_or_404(Test, id=test_id)
-    return render(request, 'test_for_student/test_detail.html', {'test': test})
+    questions = Question.objects.filter(test=test)
+    
+    return render(request, 'test_for_student/test_detail.html', {'test': test, 'questions': questions})

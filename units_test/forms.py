@@ -26,7 +26,7 @@ class QuestionForm(forms.ModelForm):
         fields = ['question_type', 'points', 'text']
         widgets = {
             'question_type': forms.Select(attrs={'class': 'm-2 h-36 rounded-lg p-2 bg-gray-900 text-white', 'style': 'width: 25rem'}),
-            'text': forms.TextInput(attrs={'class': 'm-2 h-36 rounded-lg p-2 bg-gray-900 text-white', 'placeholder': "your question"}), 
+            'text': forms.Textarea(attrs={'class': 'm-2 rounded-lg p-2 bg-gray-900 text-white', 'placeholder': "your question", 'cols': '20', 'rows': '5'}), 
             'points': forms.NumberInput(attrs={'class': 'm-2 h-36 rounded-lg p-2 bg-gray-900 text-white', 'placeholder': "points"}), 
         }
 
