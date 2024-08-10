@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Test, Question, Answer
 from .forms import TestForm, QuestionForm, AnswerForm
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
+from django.http import JsonResponse,QueryDict
 from subject.models import Subject
 
 def create_test(request):
@@ -47,6 +47,21 @@ def test_build(request, test_id):
         'total_points' : total_points
     })
 
+def delete_question(request, test_id, question_index):
+    if request.method == 'POST':
+        try:
+            questions = request.session.get(f'questions_{test_id}', [])
+            if 0 <= question_index < len(questions):
+                del questions[question_index]
+                request.session[f'questions_{test_id}'] = questions
+                return JsonResponse({'status': 'success'})
+            else:
+                return JsonResponse({'status': 'failed', 'error': 'invalid question index'}, status=400)
+        except Exception as e:
+            return JsonResponse({'status': 'failed', 'error': str(e)}, status=400)
+    else:
+        return JsonResponse({'status': 'failed', 'error': 'invalid request method'}, status=400)
+
 @csrf_exempt
 def add_question(request, test_id):
     if request.method == 'POST':
@@ -67,6 +82,7 @@ def add_question(request, test_id):
             for af in answer_forms:
                 errors.update(af.errors)
             return JsonResponse({'success': False, 'errors': errors})
+
     return JsonResponse({'success': False, 'errors': 'Invalid request method'})
 
 def publish_test(request, test_id):
@@ -106,7 +122,7 @@ def publish_test(request, test_id):
 
             return redirect('test_detail', test_id=test.pk)
 
-    return redirect('test_build', test_id=test_id)
+    return redirect('test_build', test_id=test_id)  
 
 
 def test_detail(request, test_id):

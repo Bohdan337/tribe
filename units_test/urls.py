@@ -8,4 +8,5 @@ urlpatterns = [
     path('test/build/<int:test_id>/add_question', views.add_question, name='add_question'),
     path('test/<int:test_id>/publish', views.publish_test, name='publish_test'),
     path('test/<int:test_id>', views.test_detail, name='test_detail'),
+    path('test/<int:test_id>/question/<int:question_index>/delete/', views.delete_question, name='delete_question'),
 ]

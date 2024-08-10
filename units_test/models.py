@@ -10,15 +10,15 @@ class Test(models.Model):
 
     def __str__(self):
         return self.name
-    
 
 
+         
 class Question(models.Model):
     SINGLE_ANSWER = 'single'
     MULTIPLE_ANSWERS = 'multiple'
     ANSWER_TYPE_CHOICES = [
-        (SINGLE_ANSWER, 'Одна правильна відповідь'),
-        (MULTIPLE_ANSWERS, 'Декілька правильних відповідей'),
+        (SINGLE_ANSWER, 'One correct answer'),
+        (MULTIPLE_ANSWERS, 'Several correct answers'), 
     ]
 
     test = models.ForeignKey(Test, on_delete=models.CASCADE, related_name='questions')

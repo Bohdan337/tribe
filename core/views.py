@@ -21,5 +21,11 @@ def home(request):
     # Render the 'index.html' template with the subjects data.
     context = {'subject': subjectsStudent,
                'subjectT': subjectTeacher}
+    
+    if request.method == 'POST':
+        name = request.POST.get('searchingbox')
+        if name:
+            search_subject = Subject.objects.filter(title__icontains=name).all()
+            context['search'] = search_subject
 
-    return render(request, 'index.html', context=context)
+    return render(request, 'index.html', context=context)   

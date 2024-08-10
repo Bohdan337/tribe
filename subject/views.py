@@ -94,6 +94,9 @@ def students_search(request, subject_id):
     
     return JsonResponse({'status': 'failed', 'error': 'invalid request'}), 400
 
+
+
+
 @login_required
 def create_course(request):
     """
